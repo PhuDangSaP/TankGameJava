@@ -7,7 +7,7 @@ package objects;
 import inputs.KeyHandler;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
-import java.awt.Color;
+import com.mycompany.tankgamejava.Util;
 import java.awt.Graphics2D;
 
 /**
@@ -24,11 +24,12 @@ enum PlayerState {
 
 public class Player extends GameObject {
 
-    final int speed = 2;
+    final int speed = 1;
     PlayerState state;
 
     public Player(int x, int y) {
         super(x, y);
+        state=PlayerState.IDLE;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Player extends GameObject {
     }
 
     public void InputHandle() {
-         KeyHandler keyHandler = Game.getInstance().getKeyHandler();
+        KeyHandler keyHandler = Game.getInstance().getKeyHandler();
         int dirX = 0, dirY = 0;
         if (keyHandler.rightPressed) {
             dirX = 1;
@@ -70,18 +71,23 @@ public class Player extends GameObject {
             state = PlayerState.MOVING_RIGHT;
             vx = speed;
             vy = 0;
+            dir = 4;
         } else if (dirX < 0) {
             state = PlayerState.MOVING_LEFT;
             vx = -speed;
             vy = 0;
+            dir = 2;
         } else if (dirY > 0) {
             state = PlayerState.MOVING_UP;
             vy = -speed;
             vx = 0;
+            dir = 1;
+
         } else if (dirY < 0) {
             state = PlayerState.MOVING_DOWN;
             vy = speed;
             vx = 0;
+            dir = 3;
         } else {
             state = PlayerState.IDLE;
             vx = 0;
@@ -91,7 +97,24 @@ public class Player extends GameObject {
 
     @Override
     public void Render(Graphics2D g2) {
-         ResourceManager.getInstance().getSprite(2).Draw(g2,x,y);
+        int aniId = -1;
+        switch (state) {
+            case PlayerState.IDLE -> {
+                aniId = switch (dir) {
+                    case 1 -> Util.ID_ANI_IDLE_UP;
+                    case 2 -> Util.ID_ANI_IDLE_LEFT;
+                    case 3 -> Util.ID_ANI_IDLE_DOWN;
+                    case 4 -> Util.ID_ANI_IDLE_RIGHT;
+                    default -> Util.ID_ANI_IDLE_UP;
+                };
+            }
+            case PlayerState.MOVING_UP -> aniId = Util.ID_ANI_MOVING_UP;
+            case PlayerState.MOVING_LEFT -> aniId = Util.ID_ANI_MOVING_LEFT;
+            case PlayerState.MOVING_DOWN -> aniId = Util.ID_ANI_MOVING_DOWN;
+            case PlayerState.MOVING_RIGHT -> aniId = Util.ID_ANI_MOVING_RIGHT;
+            default -> aniId = Util.ID_ANI_IDLE_UP;
+        }
+        ResourceManager.getInstance().getAnimation(aniId).Render(g2, x, y);
     }
 
 }

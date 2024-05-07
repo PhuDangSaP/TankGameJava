@@ -27,7 +27,7 @@ public class Sprite {
         this.bottom=bottom;
         this.image=texture.image.getSubimage(left, top, right-left, bottom-top);
     }
-    public void Draw(Graphics2D g2,int x,int y)
+    public void draw(Graphics2D g2,int x,int y)
     {      
         g2.drawImage(image, x,y,32,32, null);
     }

@@ -17,39 +17,38 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_W -> upPressed = true;
+            case KeyEvent.VK_S -> downPressed = true;
+            case KeyEvent.VK_A -> leftPressed = true;
+            case KeyEvent.VK_D -> rightPressed = true;
+            default -> {
+            }
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_W) {
-            upPressed = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_S) {
-            downPressed = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_A) {
-            leftPressed = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_D) {
-            rightPressed = true;
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_W -> upPressed = true;
+            case KeyEvent.VK_S -> downPressed = true;
+            case KeyEvent.VK_A -> leftPressed = true;
+            case KeyEvent.VK_D -> rightPressed = true;
+            default -> {
+            }
         }
 
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {   
-        if (e.getKeyCode() == KeyEvent.VK_W) {
-            upPressed = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_S) {
-            downPressed = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_A) {
-            leftPressed = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_D) {
-            rightPressed = false;
+    public void keyReleased(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_W -> upPressed = false;
+            case KeyEvent.VK_S -> downPressed = false;
+            case KeyEvent.VK_A -> leftPressed = false;
+            case KeyEvent.VK_D -> rightPressed = false;
+            default -> {
+            }
         }
     }
 

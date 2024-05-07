@@ -15,6 +15,7 @@ public abstract class GameObject {
     protected int y;
     protected float vx;
     protected float vy;
+    protected int dir;
     
     public GameObject(int x,int y)
     {
