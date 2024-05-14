@@ -18,4 +18,14 @@ public class Util {
     public static final int ID_ANI_MOVING_LEFT = 6;
     public static final int ID_ANI_MOVING_DOWN = 7;
     public static final int ID_ANI_MOVING_RIGHT = 8;
+    
+    
+    public static final int ID_ENE1_IDLE_UP = 9;
+    public static final int ID_ENE1_IDLE_LEFT = 10;
+    public static final int ID_ENE1_IDLE_DOWN = 11;
+    public static final int ID_ENE1_IDLE_RIGHT = 12;
+    public static final int ID_ENE1_MOVING_UP = 13;
+    public static final int ID_ENE1_MOVING_LEFT = 14;
+    public static final int ID_ENE1_MOVING_DOWN = 15;
+    public static final int ID_ENE1_MOVING_RIGHT = 16;
 }
