@@ -6,6 +6,7 @@ package com.mycompany.tankgamejava;
 
 import inputs.KeyHandler;
 import objects.Player;
+import objects.Enemy;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -35,6 +36,7 @@ public final class Game extends JPanel implements Runnable {
     KeyHandler keyHandler;
     Thread gameThread;
     Player player;
+    Enemy enemy1;
     Vector<GameObject> objects;
 
     private Game() {
@@ -56,11 +58,13 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void loadResources() {
-
+        objects= new Vector<>();
         ResourceManager res = ResourceManager.getInstance();
 
-        res.addTexture(1, "D:\\TankGameJava\\Resources\\General.png");
+        res.addTexture(1, "Resources\\General.png");
         Texture tex = res.getTexture(1);
+        
+        //player
         res.addSprite(1, 1, 2, 13, 14, tex);
         res.addSprite(2, 17, 2, 29, 14, tex);
         res.addSprite(3, 34, 1, 46, 13, tex);
@@ -105,6 +109,54 @@ public final class Game extends JPanel implements Runnable {
 
         player = new Player(100, 100);
         objects.add(player);
+        //end player
+        
+        //enemy1
+        res.addSprite(9, 130, 2, 141, 14, tex);
+        res.addSprite(10, 162, 1, 175, 14, tex);
+        res.addSprite(11, 194, 1, 205, 13, tex);
+        res.addSprite(12, 224, 1, 237, 13, tex);
+        res.addSprite(13, 144, 2, 158, 13, tex);
+        res.addSprite(14, 177, 1, 191, 13, tex);
+        res.addSprite(15, 209, 1, 221, 13, tex);
+        res.addSprite(16, 241, 1, 253, 13, tex);
+
+        Animation ani1 = new Animation(100000000);
+        ani1.Add(9);
+        res.addAnimation(Util.ID_ENE1_IDLE_UP, ani1);// idle up
+        ani1 = new Animation(100000000);
+        ani1.Add(10);
+        res.addAnimation(Util.ID_ENE1_IDLE_LEFT, ani1); // idle left
+        ani1 = new Animation(100000000);
+        ani1.Add(11);
+        res.addAnimation(Util.ID_ENE1_IDLE_DOWN, ani1); // idle down
+        ani1 = new Animation(100000000);
+        ani1.Add(12);
+        res.addAnimation(Util.ID_ENE1_IDLE_RIGHT, ani1); // idle right
+
+        ani1 = new Animation(100000000);
+        ani1.Add(9);
+        ani1.Add(13);
+        res.addAnimation(Util.ID_ENE1_MOVING_UP, ani1); // moving up
+
+        ani1 = new Animation(100000000);
+        ani1.Add(10);
+        ani1.Add(14);
+        res.addAnimation(Util.ID_ENE1_MOVING_LEFT, ani1);// moving left
+
+        ani1 = new Animation(100000000);
+        ani1.Add(11);
+        ani1.Add(15);
+        res.addAnimation(Util.ID_ENE1_MOVING_DOWN, ani1);// moving down
+
+        ani1 = new Animation(100000000);
+        ani1.Add(12);
+        ani1.Add(16);
+        res.addAnimation(Util.ID_ENE1_MOVING_RIGHT, ani1);// moving right
+
+        enemy1 = new Enemy(screenWidth-30, 0);
+        objects.add(enemy1);
+        //endenemy1
 
     }
 
@@ -132,6 +184,7 @@ public final class Game extends JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics g) {
+         if(objects==null) return;
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
