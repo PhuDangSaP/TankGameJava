@@ -154,7 +154,7 @@ public final class Game extends JPanel implements Runnable {
         ani1.Add(16);
         res.addAnimation(Util.ID_ENE1_MOVING_RIGHT, ani1);// moving right
 
-        enemy1 = new Enemy(screenWidth-30, 0);
+        enemy1 = new Enemy(150, 100);
         objects.add(enemy1);
         //endenemy1
 
