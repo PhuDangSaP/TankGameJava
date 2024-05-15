@@ -9,6 +9,7 @@ import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
 import com.mycompany.tankgamejava.Util;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  *
@@ -115,6 +116,12 @@ public class Player extends GameObject {
             default -> aniId = Util.ID_ANI_IDLE_UP;
         }
         ResourceManager.getInstance().getAnimation(aniId).Render(g2, x, y);
+    }
+    @Override
+    public Rectangle getBoundingBox()
+    {
+        Rectangle rect = new Rectangle(x,y,32,32);
+        return rect;
     }
 
 }

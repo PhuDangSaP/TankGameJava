@@ -57,9 +57,10 @@ public final class Game extends JPanel implements Runnable {
 
     public void loadResources() {
 
+        objects= new Vector<>();
         ResourceManager res = ResourceManager.getInstance();
 
-        res.addTexture(1, "D:\\TankGameJava\\Resources\\General.png");
+        res.addTexture(1, "Resources\\General.png");
         Texture tex = res.getTexture(1);
         res.addSprite(1, 1, 2, 13, 14, tex);
         res.addSprite(2, 17, 2, 29, 14, tex);
@@ -135,6 +136,8 @@ public final class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
+        if(objects==null)
+            return;
         for (GameObject obj : objects) {
             obj.Render(g2);
         }

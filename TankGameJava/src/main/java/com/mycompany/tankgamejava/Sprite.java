@@ -5,6 +5,7 @@
 package com.mycompany.tankgamejava;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 /**
@@ -30,5 +31,9 @@ public class Sprite {
     public void draw(Graphics2D g2,int x,int y)
     {      
         g2.drawImage(image, x,y,32,32, null);
+    }
+    public Rectangle getBoundingBox()
+    {
+        return new Rectangle(0,0, right-left, bottom-top);
     }
 }

@@ -5,6 +5,7 @@
 package objects;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  *
@@ -25,5 +26,6 @@ public abstract class GameObject {
     
     public abstract void Update();
     public abstract void Render(Graphics2D g2);
+    public abstract Rectangle getBoundingBox();
     
 }
