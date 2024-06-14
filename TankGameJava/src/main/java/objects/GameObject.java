@@ -4,7 +4,9 @@
  */
 package objects;
 
+import com.mycompany.tankgamejava.CollisionEvent;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  *
@@ -22,7 +24,15 @@ public abstract class GameObject {
         this.x=x;
         this.y=y;
     }
-    
+    public float getSpeedX(){
+        return vx;
+    }
+    public float getSpeedY()
+    {
+        return vy;
+    }
+    public abstract Rectangle getBoundingBox();
+    public abstract void OnCollisionWith(CollisionEvent e);
     public abstract void Update();
     public abstract void Render(Graphics2D g2);
     

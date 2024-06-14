@@ -1,9 +1,12 @@
 package objects;
 
+import com.mycompany.tankgamejava.CollisionEvent;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
 import com.mycompany.tankgamejava.Util;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.Random;
 
 enum EnemyState {
@@ -123,6 +126,21 @@ public class Enemy extends GameObject {
                 aniId = Util.ID_ENE1_IDLE_RIGHT;
         }
         ResourceManager.getInstance().getAnimation(aniId).Render(g2, x, y);
+        g2.setColor(Color.YELLOW);
+        g2.drawRect(x, y, 32,32);
+    }
+
+    @Override
+    public Rectangle getBoundingBox() {
+        Rectangle rect= ResourceManager.getInstance().getSprite(9).getBoundingBox();
+        rect.x=x;
+        rect.y=y;
+        return rect;
+    }
+
+    @Override
+    public void OnCollisionWith(CollisionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

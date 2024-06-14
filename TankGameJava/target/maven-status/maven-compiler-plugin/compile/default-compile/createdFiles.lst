@@ -1,12 +1,15 @@
 com\mycompany\tankgamejava\TankGameJava.class
 com\mycompany\tankgamejava\Sprite.class
 objects\GameObject.class
+com\mycompany\tankgamejava\CollisionDir.class
 com\mycompany\tankgamejava\ResourceManager.class
 objects\EnemyState.class
 com\mycompany\tankgamejava\Util.class
+com\mycompany\tankgamejava\Collision.class
 inputs\KeyHandler.class
 com\mycompany\tankgamejava\Texture.class
 com\mycompany\tankgamejava\AnimationFrame.class
+com\mycompany\tankgamejava\CollisionEvent.class
 objects\Player.class
 objects\PlayerState.class
 objects\Enemy$1.class

@@ -12,8 +12,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -27,8 +31,8 @@ public final class Game extends JPanel implements Runnable {
 
     private static Game instance;
     final int tileSize = 32;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
+    final int maxScreenCol = 13;
+    final int maxScreenRow = 13;
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
     final int FPS_SET = 120;
@@ -38,6 +42,7 @@ public final class Game extends JPanel implements Runnable {
     Player player;
     Enemy enemy1;
     Vector<GameObject> objects;
+    int mapData[][];
 
     private Game() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -59,58 +64,58 @@ public final class Game extends JPanel implements Runnable {
 
     public void loadResources() {
         objects= new Vector<>();
+        mapData = new int [maxScreenCol][maxScreenRow];
         ResourceManager res = ResourceManager.getInstance();
 
         res.addTexture(1, "Resources\\General.png");
         Texture tex = res.getTexture(1);
-        
+
         //player
-        res.addSprite(1, 1, 2, 13, 14, tex);
-        res.addSprite(2, 17, 2, 29, 14, tex);
-        res.addSprite(3, 34, 1, 46, 13, tex);
-        res.addSprite(4, 50, 1, 62, 13, tex);
-        res.addSprite(5, 65, 1, 77, 13, tex);
-        res.addSprite(6, 81, 1, 93, 13, tex);
-        res.addSprite(7, 97, 1, 109, 13, tex);
-        res.addSprite(8, 113, 1, 125, 13, tex);
+        res.addSprite(51, 1, 2, 13, 14, tex);
+        res.addSprite(52, 17, 2, 29, 14, tex);
+        res.addSprite(53, 34, 1, 46, 13, tex);
+        res.addSprite(54, 50, 1, 62, 13, tex);
+        res.addSprite(55, 65, 1, 77, 13, tex);
+        res.addSprite(56, 81, 1, 93, 13, tex);
+        res.addSprite(57, 97, 1, 109, 13, tex);
+        res.addSprite(58, 113, 1, 125, 13, tex);
 
         Animation ani = new Animation(100000000);
-        ani.Add(1);
+        ani.Add(51);
         res.addAnimation(Util.ID_ANI_IDLE_UP, ani);// idle up
         ani = new Animation(100000000);
-        ani.Add(3);
+        ani.Add(53);
         res.addAnimation(Util.ID_ANI_IDLE_LEFT, ani); // idle left
         ani = new Animation(100000000);
-        ani.Add(5);
+        ani.Add(55);
         res.addAnimation(Util.ID_ANI_IDLE_DOWN, ani); // idle down
         ani = new Animation(100000000);
-        ani.Add(7);
+        ani.Add(57);
         res.addAnimation(Util.ID_ANI_IDLE_RIGHT, ani); // idle right
 
         ani = new Animation(100000000);
-        ani.Add(1);
-        ani.Add(2);
+        ani.Add(51);
+        ani.Add(52);
         res.addAnimation(Util.ID_ANI_MOVING_UP, ani); // moving up
 
         ani = new Animation(100000000);
-        ani.Add(3);
-        ani.Add(4);
+        ani.Add(53);
+        ani.Add(54);
         res.addAnimation(Util.ID_ANI_MOVING_LEFT, ani);// moving left
 
         ani = new Animation(100000000);
-        ani.Add(5);
-        ani.Add(6);
+        ani.Add(55);
+        ani.Add(56);
         res.addAnimation(Util.ID_ANI_MOVING_DOWN, ani);// moving down
 
         ani = new Animation(100000000);
-        ani.Add(7);
-        ani.Add(8);
+        ani.Add(57);
+        ani.Add(58);
         res.addAnimation(Util.ID_ANI_MOVING_RIGHT, ani);// moving right
 
-        player = new Player(100, 100);
-        objects.add(player);
+        player = new Player(160, 384);
         //end player
-        
+
         //enemy1
         res.addSprite(9, 130, 2, 141, 14, tex);
         res.addSprite(10, 162, 1, 175, 14, tex);
@@ -158,6 +163,16 @@ public final class Game extends JPanel implements Runnable {
         objects.add(enemy1);
         //endenemy1
 
+
+
+        //tile
+
+        res.addSprite(1, 256, 0, 271, 15, tex); // brick
+        res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
+        res.addSprite(5, 304, 32, 319, 47, tex); // base
+        
+        loadMap();
+
     }
 
     @Override
@@ -177,9 +192,12 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void Update() {
+
         for (GameObject obj : objects) {
             obj.Update();
         }
+        Collision.Process(player, objects);
+        player.Update();
     }
 
     @Override
@@ -191,6 +209,11 @@ public final class Game extends JPanel implements Runnable {
         for (GameObject obj : objects) {
             obj.Render(g2);
         }
+        if(player!=null)
+        {
+            player.Render(g2);
+        }
+        renderMap(g2);
 
         g2.dispose();
     }
@@ -214,6 +237,51 @@ public final class Game extends JPanel implements Runnable {
             e.printStackTrace();
         }
         return new Texture(image);
+    }
+    public void loadMap()
+    {
+        try{
+            File map= new File("Resources\\Level1.txt");
+            BufferedReader br=new BufferedReader(new FileReader(map));
+            
+            int i=0; // row
+            int j=0; // col
+            while(i<maxScreenRow&&j<maxScreenCol)
+            {
+                String line = br.readLine();
+                while(j<maxScreenRow){
+                    String numbers[]=line.split(" ");
+                    int num=Integer.parseInt(numbers[j]);
+                    mapData[i][j]=num;
+                    j++;
+                }
+                if(j==maxScreenCol)
+                {
+                    j=0;
+                    i++;
+                }
+            }
+            br.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    void renderMap(Graphics2D g2)
+    {
+        ResourceManager res= ResourceManager.getInstance();
+        for(int i=0;i<maxScreenRow;i++)
+        {
+            for(int j=0;j<maxScreenCol;j++)
+            {
+                int id=mapData[i][j];
+                if(id!=0)
+                {
+                     res.getSprite(id).draw(g2, j*tileSize, i*tileSize    );
+                }
+               
+            }
+        }
     }
 
 }

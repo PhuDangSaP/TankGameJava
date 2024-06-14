@@ -4,11 +4,15 @@
  */
 package objects;
 
+import com.mycompany.tankgamejava.Collision;
+import com.mycompany.tankgamejava.CollisionEvent;
 import inputs.KeyHandler;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
 import com.mycompany.tankgamejava.Util;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  *
@@ -29,7 +33,7 @@ public class Player extends GameObject {
 
     public Player(int x, int y) {
         super(x, y);
-        state=PlayerState.IDLE;
+        state = PlayerState.IDLE;
     }
 
     @Override
@@ -101,20 +105,61 @@ public class Player extends GameObject {
         switch (state) {
             case PlayerState.IDLE -> {
                 aniId = switch (dir) {
-                    case 1 -> Util.ID_ANI_IDLE_UP;
-                    case 2 -> Util.ID_ANI_IDLE_LEFT;
-                    case 3 -> Util.ID_ANI_IDLE_DOWN;
-                    case 4 -> Util.ID_ANI_IDLE_RIGHT;
-                    default -> Util.ID_ANI_IDLE_UP;
+                    case 1 ->
+                        Util.ID_ANI_IDLE_UP;
+                    case 2 ->
+                        Util.ID_ANI_IDLE_LEFT;
+                    case 3 ->
+                        Util.ID_ANI_IDLE_DOWN;
+                    case 4 ->
+                        Util.ID_ANI_IDLE_RIGHT;
+                    default ->
+                        Util.ID_ANI_IDLE_UP;
                 };
             }
-            case PlayerState.MOVING_UP -> aniId = Util.ID_ANI_MOVING_UP;
-            case PlayerState.MOVING_LEFT -> aniId = Util.ID_ANI_MOVING_LEFT;
-            case PlayerState.MOVING_DOWN -> aniId = Util.ID_ANI_MOVING_DOWN;
-            case PlayerState.MOVING_RIGHT -> aniId = Util.ID_ANI_MOVING_RIGHT;
-            default -> aniId = Util.ID_ANI_IDLE_UP;
+            case PlayerState.MOVING_UP ->
+                aniId = Util.ID_ANI_MOVING_UP;
+            case PlayerState.MOVING_LEFT ->
+                aniId = Util.ID_ANI_MOVING_LEFT;
+            case PlayerState.MOVING_DOWN ->
+                aniId = Util.ID_ANI_MOVING_DOWN;
+            case PlayerState.MOVING_RIGHT ->
+                aniId = Util.ID_ANI_MOVING_RIGHT;
+            default ->
+                aniId = Util.ID_ANI_IDLE_UP;
         }
         ResourceManager.getInstance().getAnimation(aniId).Render(g2, x, y);
+        g2.setColor(Color.PINK);
+        g2.drawRect(x, y, 32,32);
+    }
+
+    @Override
+    public Rectangle getBoundingBox() {
+        ResourceManager res = ResourceManager.getInstance();
+        Rectangle rect = new Rectangle();
+        switch (state) {
+            case PlayerState.IDLE:
+                rect= res.getSprite(51).getBoundingBox();
+
+            case PlayerState.MOVING_UP:
+                rect= res.getSprite(51).getBoundingBox();
+            case PlayerState.MOVING_LEFT:
+                rect= res.getSprite(53).getBoundingBox();
+            case PlayerState.MOVING_DOWN:
+                rect= res.getSprite(55).getBoundingBox();
+            case PlayerState.MOVING_RIGHT:
+                rect= res.getSprite(57).getBoundingBox();
+            default:
+                rect= res.getSprite(51).getBoundingBox();
+        }
+        rect.x =x;
+        rect.y =y;
+        return rect;
+    }
+
+    @Override
+    public void OnCollisionWith(CollisionEvent e) {
+
     }
 
 }
