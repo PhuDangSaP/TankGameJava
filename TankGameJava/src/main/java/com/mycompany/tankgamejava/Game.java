@@ -170,6 +170,8 @@ public final class Game extends JPanel implements Runnable {
         res.addSprite(1, 256, 0, 271, 15, tex); // brick
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
         res.addSprite(5, 304, 32, 319, 47, tex); // base
+        res.addSprite(6, 256, 32, 271, 47, tex);  //river
+        res.addSprite(7, 271, 32, 288, 47, tex); //grass
         
         loadMap();
 
@@ -241,7 +243,7 @@ public final class Game extends JPanel implements Runnable {
     public void loadMap()
     {
         try{
-            File map= new File("Resources\\Level1.txt");
+            File map= new File("Resources\\Level3.txt");
             BufferedReader br=new BufferedReader(new FileReader(map));
             
             int i=0; // row
@@ -277,7 +279,7 @@ public final class Game extends JPanel implements Runnable {
                 int id=mapData[i][j];
                 if(id!=0)
                 {
-                     res.getSprite(id).draw(g2, j*tileSize, i*tileSize    );
+                     res.getSprite(id).draw(g2, j*tileSize, i*tileSize);
                 }
                
             }
