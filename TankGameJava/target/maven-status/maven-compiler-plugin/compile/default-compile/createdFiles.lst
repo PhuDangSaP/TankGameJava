@@ -1,13 +1,16 @@
 com\mycompany\tankgamejava\TankGameJava.class
+objects\SteelBrick.class
 com\mycompany\tankgamejava\Sprite.class
 objects\GameObject.class
 com\mycompany\tankgamejava\CollisionDir.class
 com\mycompany\tankgamejava\ResourceManager.class
 objects\EnemyState.class
+objects\Bullet.class
 com\mycompany\tankgamejava\Util.class
 com\mycompany\tankgamejava\Collision.class
 inputs\KeyHandler.class
 com\mycompany\tankgamejava\Texture.class
+objects\Brick.class
 com\mycompany\tankgamejava\AnimationFrame.class
 com\mycompany\tankgamejava\CollisionEvent.class
 objects\Player.class
@@ -16,4 +19,5 @@ objects\Enemy$1.class
 objects\Player$1.class
 com\mycompany\tankgamejava\Animation.class
 objects\Enemy.class
+objects\Base.class
 com\mycompany\tankgamejava\Game.class

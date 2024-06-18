@@ -52,7 +52,7 @@ public class Animation {
         frames.add(frame);
     }
 
-    public void Render(Graphics2D g2,int x, int y) {
+    public void Render(Graphics2D g2,int x, int y, int size) {
         long now = System.nanoTime();
         if (currentFrame == -1) {
             currentFrame = 0;
@@ -67,6 +67,6 @@ public class Animation {
                 }
              }
         }
-        frames.get(currentFrame).getSprite().draw(g2,x, y);
+        frames.get(currentFrame).getSprite().draw(g2,x, y,size);
     }
 }

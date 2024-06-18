@@ -28,4 +28,7 @@ public class Util {
     public static final int ID_ENE1_MOVING_LEFT = 14;
     public static final int ID_ENE1_MOVING_DOWN = 15;
     public static final int ID_ENE1_MOVING_RIGHT = 16;
+    
+    public static final int ID_ANI_BULLET = 20;
+    public static final int ID_ANI_EXPLOSION = 30;
 }

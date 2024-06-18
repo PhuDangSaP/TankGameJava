@@ -21,7 +21,10 @@ import java.io.InputStreamReader;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import objects.Base;
+import objects.Brick;
 import objects.GameObject;
+import objects.SteelBrick;
 
 /**
  *
@@ -63,8 +66,8 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void loadResources() {
-        objects= new Vector<>();
-        mapData = new int [maxScreenCol][maxScreenRow];
+        objects = new Vector<>();
+        mapData = new int[maxScreenCol][maxScreenRow];
         ResourceManager res = ResourceManager.getInstance();
 
         res.addTexture(1, "Resources\\General.png");
@@ -164,13 +167,28 @@ public final class Game extends JPanel implements Runnable {
         //endenemy1
 
 
-
         //tile
-
         res.addSprite(1, 256, 0, 271, 15, tex); // brick
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
         res.addSprite(5, 304, 32, 319, 47, tex); // base
-        
+
+        //bullet
+        res.addSprite(100, 323, 102, 325, 105, tex); // bullet up
+        res.addSprite(101, 330, 102, 333, 104, tex); // bullet left
+        res.addSprite(102, 339, 102, 341, 105, tex); // bullet down
+        res.addSprite(103, 346, 102, 349, 104, tex); // bullet right
+
+        //explose
+        res.addSprite(150, 256, 128, 269, 143, tex);
+        res.addSprite(151, 271, 128, 286, 143, tex);
+        res.addSprite(152, 288, 128, 303, 143, tex);
+
+        Animation exploseAni = new Animation(100000000);
+        exploseAni.Add(150);
+        exploseAni.Add(151);
+        exploseAni.Add(152);
+        res.addAnimation(Util.ID_ANI_EXPLOSION, exploseAni);
+
         loadMap();
 
     }
@@ -192,28 +210,28 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void Update() {
-
+        Collision.coObjects=objects;
         for (GameObject obj : objects) {
             obj.Update();
         }
-        Collision.Process(player, objects);
         player.Update();
     }
 
     @Override
     public void paintComponent(Graphics g) {
-         if(objects==null) return;
+        if (objects == null) {
+            return;
+        }
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
         for (GameObject obj : objects) {
             obj.Render(g2);
         }
-        if(player!=null)
-        {
+        if (player != null) {
             player.Render(g2);
         }
-        renderMap(g2);
+        //renderMap(g2);
 
         g2.dispose();
     }
@@ -222,12 +240,7 @@ public final class Game extends JPanel implements Runnable {
         return this.keyHandler;
     }
 
-    public static Game getInstance() {
-        if (instance == null) {
-            instance = new Game();
-        }
-        return instance;
-    }
+    
 
     Texture loadTexture(String path) {
         BufferedImage image = null;
@@ -238,50 +251,63 @@ public final class Game extends JPanel implements Runnable {
         }
         return new Texture(image);
     }
-    public void loadMap()
-    {
-        try{
-            File map= new File("Resources\\Level1.txt");
-            BufferedReader br=new BufferedReader(new FileReader(map));
-            
-            int i=0; // row
-            int j=0; // col
-            while(i<maxScreenRow&&j<maxScreenCol)
-            {
+
+    public void loadMap() {
+        try {
+            File map = new File("Resources\\Level1.txt");
+            BufferedReader br = new BufferedReader(new FileReader(map));
+
+            int i = 0; // row
+            int j = 0; // col
+            while (i < maxScreenRow && j < maxScreenCol) {
                 String line = br.readLine();
-                while(j<maxScreenRow){
-                    String numbers[]=line.split(" ");
-                    int num=Integer.parseInt(numbers[j]);
-                    mapData[i][j]=num;
+                while (j < maxScreenRow) {
+                    String numbers[] = line.split(" ");
+                    int num = Integer.parseInt(numbers[j]);
+
+                    switch (num) {
+                        case 1 ->
+                            objects.add(new Brick(j * tileSize, i * tileSize));
+                        case 2 ->
+                            objects.add(new SteelBrick(j * tileSize, i * tileSize));
+                        case 5 ->
+                            objects.add(new Base(j * tileSize, i * tileSize));
+                    }
+                    mapData[i][j] = num;
                     j++;
                 }
-                if(j==maxScreenCol)
-                {
-                    j=0;
+                if (j == maxScreenCol) {
+                    j = 0;
                     i++;
                 }
             }
             br.close();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    void renderMap(Graphics2D g2)
+    public void removeObject(GameObject obj)
     {
-        ResourceManager res= ResourceManager.getInstance();
-        for(int i=0;i<maxScreenRow;i++)
-        {
-            for(int j=0;j<maxScreenCol;j++)
-            {
-                int id=mapData[i][j];
-                if(id!=0)
-                {
-                     res.getSprite(id).draw(g2, j*tileSize, i*tileSize    );
-                }
-               
-            }
-        }
+        objects.remove(obj);
     }
 
+    /*
+    void renderMap(Graphics2D g2) {
+        ResourceManager res = ResourceManager.getInstance();
+        for (int i = 0; i < maxScreenRow; i++) {
+            for (int j = 0; j < maxScreenCol; j++) {
+                int id = mapData[i][j];
+                if (id != 0) {
+                    res.getSprite(id).draw(g2, j * tileSize, i * tileSize, tileSize);
+                }
+
+            }
+        }
+    }*/
+    public static Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
 }
