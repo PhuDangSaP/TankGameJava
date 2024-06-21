@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 import objects.Base;
 import objects.Brick;
 import objects.GameObject;
+import objects.Grass;
+import objects.River;
 import objects.SteelBrick;
 
 /**
@@ -116,7 +118,7 @@ public final class Game extends JPanel implements Runnable {
         ani.Add(58);
         res.addAnimation(Util.ID_ANI_MOVING_RIGHT, ani);// moving right
 
-        player = new Player(160, 384);
+        player = new Player(128, 384);
         //end player
 
         //enemy1
@@ -171,6 +173,8 @@ public final class Game extends JPanel implements Runnable {
         res.addSprite(1, 256, 0, 271, 15, tex); // brick
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
         res.addSprite(5, 304, 32, 319, 47, tex); // base
+        res.addSprite(6, 256, 32, 271, 47, tex);  //river
+        res.addSprite(7, 271, 32, 288, 47, tex); //grass
 
         //bullet
         res.addSprite(100, 323, 102, 325, 105, tex); // bullet up
@@ -254,7 +258,7 @@ public final class Game extends JPanel implements Runnable {
 
     public void loadMap() {
         try {
-            File map = new File("Resources\\Level1.txt");
+            File map = new File("Resources\\Level3.txt");
             BufferedReader br = new BufferedReader(new FileReader(map));
 
             int i = 0; // row
@@ -272,6 +276,10 @@ public final class Game extends JPanel implements Runnable {
                             objects.add(new SteelBrick(j * tileSize, i * tileSize));
                         case 5 ->
                             objects.add(new Base(j * tileSize, i * tileSize));
+                        case 6 ->
+                            objects.add(new River(j * tileSize, i * tileSize));
+                        case 7 ->
+                            objects.add(new Grass(j * tileSize, i * tileSize));
                     }
                     mapData[i][j] = num;
                     j++;

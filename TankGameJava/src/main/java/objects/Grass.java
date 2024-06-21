@@ -13,9 +13,9 @@ import java.awt.Rectangle;
  *
  * @author USER
  */
-public class Brick extends GameObject{
+public class Grass extends GameObject{
 
-    public Brick(int x, int y) {
+    public Grass(int x, int y) {
         super(x, y);
     }
 
@@ -28,11 +28,11 @@ public class Brick extends GameObject{
 
     @Override
     public void Render(Graphics2D g2) {
-        ResourceManager.getInstance().getSprite(1).draw(g2, x, y, 30);
+        ResourceManager.getInstance().getSprite(7).draw(g2, x, y, 31);
     }
     @Override
     public Rectangle getBoundingBox() {
-        return new Rectangle(x, y, 30, 30);
+        return new Rectangle(x, y, 31, 31);
     }
 
     @Override
