@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 import objects.Base;
 import objects.Brick;
 import objects.GameObject;
+import objects.Grass;
+import objects.River;
 import objects.SteelBrick;
 
 /**
@@ -166,12 +168,12 @@ public final class Game extends JPanel implements Runnable {
         objects.add(enemy1);
         //endenemy1
 
-
         //tile
         res.addSprite(1, 256, 0, 271, 15, tex); // brick
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
+        res.addSprite(3, 272, 32, 287, 47, tex); // grass
+        res.addSprite(4, 272, 48, 287, 63, tex); // river
         res.addSprite(5, 304, 32, 319, 47, tex); // base
-
 
         //bullet
         res.addSprite(100, 323, 102, 325, 105, tex); // bullet up
@@ -189,7 +191,6 @@ public final class Game extends JPanel implements Runnable {
         exploseAni.Add(151);
         exploseAni.Add(152);
         res.addAnimation(Util.ID_ANI_EXPLOSION, exploseAni);
-
 
         loadMap();
 
@@ -212,7 +213,7 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void Update() {
-        Collision.coObjects=objects;
+        Collision.coObjects = objects;
         for (GameObject obj : objects) {
             obj.Update();
         }
@@ -241,8 +242,6 @@ public final class Game extends JPanel implements Runnable {
     public KeyHandler getKeyHandler() {
         return this.keyHandler;
     }
-
-    
 
     Texture loadTexture(String path) {
         BufferedImage image = null;
@@ -273,6 +272,10 @@ public final class Game extends JPanel implements Runnable {
                             objects.add(new Brick(j * tileSize, i * tileSize));
                         case 2 ->
                             objects.add(new SteelBrick(j * tileSize, i * tileSize));
+                        case 3 ->
+                            objects.add(new Grass(j * tileSize, i * tileSize));
+                        case 4 ->
+                            objects.add(new River(j * tileSize, i * tileSize));
                         case 5 ->
                             objects.add(new Base(j * tileSize, i * tileSize));
                     }
@@ -292,6 +295,7 @@ public final class Game extends JPanel implements Runnable {
     public void removeObject(GameObject obj)
     {
         objects.remove(obj);
+
     }
 
     /*
