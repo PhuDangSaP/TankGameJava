@@ -170,6 +170,8 @@ public final class Game extends JPanel implements Runnable {
         //tile
         res.addSprite(1, 256, 0, 271, 15, tex); // brick
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
+        res.addSprite(3, 272, 32, 287, 47, tex); // tree
+        res.addSprite(4, 272, 48, 287, 63, tex); // river
         res.addSprite(5, 304, 32, 319, 47, tex); // base
 
         //bullet
