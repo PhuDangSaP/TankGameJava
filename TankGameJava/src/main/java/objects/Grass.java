@@ -13,9 +13,9 @@ import java.awt.Rectangle;
  *
  * @author USER
  */
-public class Tree extends GameObject{
+public class Grass extends GameObject{
 
-    public Tree(int x, int y) {
+    public Grass(int x, int y) {
         super(x, y);
     }
 

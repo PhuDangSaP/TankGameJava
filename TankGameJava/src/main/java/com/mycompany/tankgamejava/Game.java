@@ -170,10 +170,9 @@ public final class Game extends JPanel implements Runnable {
         //tile
         res.addSprite(1, 256, 0, 271, 15, tex); // brick
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
-        res.addSprite(3, 272, 32, 287, 47, tex); // tree
+        res.addSprite(3, 272, 32, 287, 47, tex); // grass
         res.addSprite(4, 272, 48, 287, 63, tex); // river
         res.addSprite(5, 304, 32, 319, 47, tex); // base
-
         //bullet
         res.addSprite(100, 323, 102, 325, 105, tex); // bullet up
         res.addSprite(101, 330, 102, 333, 104, tex); // bullet left
@@ -190,6 +189,7 @@ public final class Game extends JPanel implements Runnable {
         exploseAni.Add(151);
         exploseAni.Add(152);
         res.addAnimation(Util.ID_ANI_EXPLOSION, exploseAni);
+
 
         loadMap();
 
@@ -254,6 +254,7 @@ public final class Game extends JPanel implements Runnable {
         return new Texture(image);
     }
 
+
     public void loadMap() {
         try {
             File map = new File("Resources\\Level1.txt");
@@ -289,8 +290,21 @@ public final class Game extends JPanel implements Runnable {
         }
     }
     public void removeObject(GameObject obj)
-    {
+    {/*
         objects.remove(obj);
+        ResourceManager res= ResourceManager.getInstance();
+        for(int i=0;i<maxScreenRow;i++)
+        {
+            for(int j=0;j<maxScreenCol;j++)
+            {
+                int id=mapData[i][j];
+                if(id!=0)
+                {
+                     res.getSprite(id).draw(g2, j*tileSize, i*tileSize);
+                }
+               
+            }
+        }*/
     }
 
     /*
