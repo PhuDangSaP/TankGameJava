@@ -32,6 +32,11 @@ public class Sprite {
 
     public void draw(Graphics2D g2, int x, int y ,int size) {
         g2.drawImage(image, x, y, size, size, null);
+}
+    public void draw(Graphics2D g2,int x,int y)
+    {      
+        g2.drawImage(image, x,y,30,30, null);
+
     }
 
 

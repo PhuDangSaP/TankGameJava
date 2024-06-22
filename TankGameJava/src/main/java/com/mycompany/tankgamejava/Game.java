@@ -172,6 +172,7 @@ public final class Game extends JPanel implements Runnable {
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
         res.addSprite(5, 304, 32, 319, 47, tex); // base
 
+
         //bullet
         res.addSprite(100, 323, 102, 325, 105, tex); // bullet up
         res.addSprite(101, 330, 102, 333, 104, tex); // bullet left
@@ -188,6 +189,7 @@ public final class Game extends JPanel implements Runnable {
         exploseAni.Add(151);
         exploseAni.Add(152);
         res.addAnimation(Util.ID_ANI_EXPLOSION, exploseAni);
+
 
         loadMap();
 
@@ -251,6 +253,7 @@ public final class Game extends JPanel implements Runnable {
         }
         return new Texture(image);
     }
+
 
     public void loadMap() {
         try {
