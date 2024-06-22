@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -118,7 +119,7 @@ public final class Game extends JPanel implements Runnable {
         ani.Add(58);
         res.addAnimation(Util.ID_ANI_MOVING_RIGHT, ani);// moving right
 
-        player = new Player(160, 384);
+        player = new Player(128, 384);
         //end player
 
         //enemy1
@@ -213,6 +214,7 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void Update() {
+        
         Collision.coObjects = objects;
         for (GameObject obj : objects) {
             obj.Update();
@@ -228,14 +230,15 @@ public final class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        for (GameObject obj : objects) {
-            obj.Render(g2);
-        }
         if (player != null) {
             player.Render(g2);
         }
-        //renderMap(g2);
 
+        for (GameObject obj : objects) {
+            obj.Render(g2);
+        }
+
+        //renderMap(g2);
         g2.dispose();
     }
 
@@ -252,7 +255,6 @@ public final class Game extends JPanel implements Runnable {
         }
         return new Texture(image);
     }
-
 
     public void loadMap() {
         try {
@@ -292,9 +294,12 @@ public final class Game extends JPanel implements Runnable {
             e.printStackTrace();
         }
     }
-    public void removeObject(GameObject obj)
-    {
+
+    public void removeObject(GameObject obj) {
+        
         objects.remove(obj);
+    
+        //Collision.coObjects.remove(obj);
 
     }
 

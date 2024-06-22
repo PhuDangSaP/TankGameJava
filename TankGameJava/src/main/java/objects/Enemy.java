@@ -28,7 +28,6 @@ public class Enemy extends GameObject {
     long lastFiredTime = 0;
     ArrayList<Bullet> bullets;
     private long lastInputTime;
-    boolean isDead = false;
     long deathTime = 0;
     final int explosionDuration = 1000;
 

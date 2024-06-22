@@ -37,7 +37,11 @@ public class SteelBrick extends GameObject {
 
     @Override
     public void OnCollisionWith(CollisionEvent e) {
-        
+        if(e.obj instanceof Bullet)
+        {
+            e.obj.isDead=true;
+            System.err.println("steel");
+        }
     }
 
 }

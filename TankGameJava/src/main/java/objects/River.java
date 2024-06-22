@@ -38,7 +38,9 @@ public class River extends GameObject{
 
     @Override
     public void OnCollisionWith(CollisionEvent e) {
-  
+        if (e.obj instanceof Bullet ) {
+            e.obj.isDead=true;
+        }
     }
     
 }

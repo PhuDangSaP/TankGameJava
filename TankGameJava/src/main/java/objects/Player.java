@@ -35,7 +35,6 @@ public class Player extends GameObject {
     ArrayList<Bullet> bullets;
     final int fireRate = 500;
     long lastFiredTime = 0;
-    boolean isDead = false;
     long deathTime = 0;
     final int explosionDuration = 1000; // duration of explosion in milliseconds
 
@@ -201,19 +200,19 @@ public class Player extends GameObject {
             switch (dir) {
                 case 1 -> {
                     offSetX = 14;
-                    offSetY = 0;
+                    offSetY = -2;
                 }
                 case 2 -> {
-                    offSetX = 0;
+                    offSetX = -2;
                     offSetY = 14;
                 }
                 case 3 -> {
-                    offSetX = 14;
+                    offSetX = 16;
                     offSetY = 28;
                 }
                 case 4 -> {
                     offSetX = 28;
-                    offSetY = 14;
+                    offSetY = 16;
                 }
             }
 
@@ -255,10 +254,10 @@ public class Player extends GameObject {
             isDead = true;
             deathTime = System.currentTimeMillis();
             state = PlayerState.DEAD;
-            System.err.println("Die");
+            System.err.println(e.obj.getClass());
         }
 
-        if (e.obj instanceof Brick || e.obj instanceof SteelBrick || e.obj instanceof Base) {
+    if (e.obj instanceof Brick || e.obj instanceof SteelBrick || e.obj instanceof River|| e.obj instanceof Base) {
             x -= vx;
             y -= vy;
         }

@@ -18,11 +18,13 @@ public abstract class GameObject {
     protected float vx;
     protected float vy;
     protected int dir;
+    public boolean isDead;
     
     public GameObject(int x,int y)
     {
         this.x=x;
         this.y=y;
+        isDead=false;
     }
     public float getSpeedX(){
         return vx;

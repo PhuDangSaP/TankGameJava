@@ -24,6 +24,7 @@ public class Bullet extends GameObject {
 
     @Override
     public void Update() {
+        if(isDead) return;
         switch (dir) {
             case 1 -> {
                 vx = 0;
@@ -49,6 +50,7 @@ public class Bullet extends GameObject {
 
     @Override
     public void Render(Graphics2D g2) {
+        if(isDead) return;
         int spriteId = -1;
         switch (dir) {
             case 1 ->
@@ -70,10 +72,14 @@ public class Bullet extends GameObject {
 
     @Override
     public void OnCollisionWith(CollisionEvent e) {
+        if(!(e.obj instanceof Grass))
+        {System.err.println("bullet hit");
+            isDead=true;
+        }
     }
 
     boolean isOffScreen() {
-        return x < 0 || x > 512 || y < 0 || y > 384;
+        return x < 0 || x > 512 || y < 0 || y > 416;
     }
 
 }
