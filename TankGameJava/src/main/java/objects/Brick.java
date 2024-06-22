@@ -17,10 +17,6 @@ import java.awt.Rectangle;
  * @author USER
  */
 public class Brick extends GameObject {
-
-    long deathTime = 0;
-    final int explosionDuration = 1000;
-
     public Brick(int x, int y) {
         super(x, y);
     }

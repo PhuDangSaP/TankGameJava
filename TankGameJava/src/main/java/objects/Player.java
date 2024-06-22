@@ -36,10 +36,19 @@ public class Player extends GameObject {
     final int fireRate = 500;
     long lastFiredTime = 0;
     long deathTime = 0;
-    final int explosionDuration = 1000; // duration of explosion in milliseconds
+    final int explosionDuration = 1000; 
+    final int respawnTime = 2000; 
+    long respawnStartTime = 0;
+    final int spawnX, spawnY; 
+    int spawnCount; 
+    final int initialSpawnCount;
 
-    public Player(int x, int y) {
+    public Player(int x, int y, int initialSpawnCount) {
         super(x, y);
+        this.spawnX = x;
+        this.spawnY = y;
+        this.initialSpawnCount = initialSpawnCount;
+        this.spawnCount = initialSpawnCount;
         state = PlayerState.IDLE;
         bullets = new ArrayList<>();
         dir = 1;
@@ -50,7 +59,12 @@ public class Player extends GameObject {
         if (isDead) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - deathTime > explosionDuration) {
-                return;
+                if (respawnStartTime == 0) {
+                    respawnStartTime = currentTime; 
+                } else if (currentTime - respawnStartTime > respawnTime) {
+                    Respawn();
+                    return;
+                }
             }
         } else {
             Collision.Process(this);
@@ -75,7 +89,7 @@ public class Player extends GameObject {
                 bullet.Update();
                 if (bullet.isOffScreen()) {
                     bullets.remove(i);
-                    Collision.coObjects.remove(bullet);
+                    //Collision.coObjects.remove(bullet);
                     i--;
                 }
             }
@@ -148,7 +162,7 @@ public class Player extends GameObject {
             if (currentTime - deathTime <= explosionDuration) {
                 ResourceManager.getInstance().getAnimation(Util.ID_ANI_EXPLOSION).Render(g2, x, y, 28);
             }
-            return; // Stop rendering the player after the explosion
+            return; 
         }
 
         int aniId = -1;
@@ -218,33 +232,13 @@ public class Player extends GameObject {
 
             Bullet bullet = new Bullet(x + offSetX, y + offSetY, dir);
             bullets.add(bullet);
-            Collision.coObjects.add(bullet);
+            //Collision.coObjects.add(bullet);
             lastFiredTime = currentTime;
         }
     }
 
     @Override
     public Rectangle getBoundingBox() {
-        /*
-        ResourceManager res = ResourceManager.getInstance();
-        Rectangle rect = new Rectangle();
-        switch (state) {
-            case IDLE:
-                rect = res.getSprite(51).getBoundingBox();
-            case MOVING_UP:
-                rect = res.getSprite(51).getBoundingBox();
-            case MOVING_LEFT:
-                rect = res.getSprite(53).getBoundingBox();
-            case MOVING_DOWN:
-                rect = res.getSprite(55).getBoundingBox();
-            case MOVING_RIGHT:
-                rect = res.getSprite(57).getBoundingBox();
-            default:
-                rect = res.getSprite(51).getBoundingBox();
-        }
-        rect.x = x;
-        rect.y = y;
-        return rect;*/
         return new Rectangle(x, y, 28, 28);
     }
 
@@ -255,12 +249,30 @@ public class Player extends GameObject {
             deathTime = System.currentTimeMillis();
             state = PlayerState.DEAD;
             System.err.println(e.obj.getClass());
+            if(e.obj instanceof Bullet)
+            {
+                e.obj.destroy();
+            }
         }
 
-    if (e.obj instanceof Brick || e.obj instanceof SteelBrick || e.obj instanceof River|| e.obj instanceof Base) {
+        if (e.obj instanceof Brick || e.obj instanceof SteelBrick || e.obj instanceof River|| e.obj instanceof Base) {
             x -= vx;
             y -= vy;
         }
+    }
 
+    public void Respawn() {
+        if (spawnCount > 0) {
+            isDead = false;
+            state = PlayerState.IDLE;
+            x = spawnX;
+            y = spawnY;
+            vx = 0;
+            vy = 0;
+            respawnStartTime = 0;
+            spawnCount--; 
+        }
     }
 }
+
+

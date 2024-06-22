@@ -21,15 +21,12 @@ enum EnemyState {
 }
 
 public class Enemy extends GameObject {
-
     final int speed = 1;
     EnemyState state;
     final int fireRate = 2000;
     long lastFiredTime = 0;
     ArrayList<Bullet> bullets;
     private long lastInputTime;
-    long deathTime = 0;
-    final int explosionDuration = 1000;
 
     public Enemy(int x, int y) {
         super(x, y);
@@ -43,7 +40,7 @@ public class Enemy extends GameObject {
             long currentTime = System.currentTimeMillis();
             if (currentTime - deathTime > explosionDuration) {
                 return;
-      
+
             }
         } else {
             Collision.Process(this);
@@ -76,6 +73,7 @@ public class Enemy extends GameObject {
                 bullet.Update();
                 if (bullet.isOffScreen()) {
                     bullets.remove(i);
+                    //Collision.coObjects.remove(bullet);
                     i--;
                 }
             }
@@ -86,7 +84,7 @@ public class Enemy extends GameObject {
     public void InputHandle() {
 
         Random random = new Random();
-        char[] keys = {'a', 's', 'd'};
+        char[] keys = {'a', 's', 'd', 'w'};
         char randomKey = keys[random.nextInt(keys.length)];
         int dirX = 0, dirY = 0;
         switch (randomKey) {
@@ -95,6 +93,8 @@ public class Enemy extends GameObject {
             case 'a' ->
                 dirX = -1;
             case 's' ->
+                dirY = 1;
+            case 'w' ->
                 dirY = -1;
             default -> {
             }
@@ -113,12 +113,18 @@ public class Enemy extends GameObject {
             vx = -speed;
             vy = 0;
             dir = 2;
-        } else if (dirY < 0) {
+        } else if (dirY > 0) {
             state = EnemyState.MOVING_DOWN;
             vy = speed;
             vx = 0;
             dir = 3;
-        } else {
+        }
+        else if (dirY < 0) {
+            state = EnemyState.MOVING_UP;
+            vy = -speed;
+            vx = 0;
+            dir = 1;
+        }else {
             state = EnemyState.IDLE;
             vx = 0;
             vy = 0;
@@ -127,7 +133,7 @@ public class Enemy extends GameObject {
     }
 
     @Override
-    public void Render(Graphics2D g2) {  
+    public void Render(Graphics2D g2) {
         if (isDead) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - deathTime <= explosionDuration) {
@@ -139,6 +145,8 @@ public class Enemy extends GameObject {
         switch (state) {
             case EnemyState.IDLE -> {
                 aniId = switch (dir) {
+                    case 1 ->
+                        Util.ID_ENE1_IDLE_UP;
                     case 2 ->
                         Util.ID_ENE1_IDLE_LEFT;
                     case 3 ->
@@ -149,6 +157,8 @@ public class Enemy extends GameObject {
                         Util.ID_ENE1_IDLE_RIGHT;
                 };
             }
+             case EnemyState.MOVING_UP ->
+                aniId = Util.ID_ENE1_MOVING_UP;
             case EnemyState.MOVING_LEFT ->
                 aniId = Util.ID_ENE1_MOVING_LEFT;
             case EnemyState.MOVING_DOWN ->
@@ -178,18 +188,18 @@ public class Enemy extends GameObject {
             switch (dir) {
                 case 1 -> {
                     offSetX = 14;
-                    offSetY = 0;
+                    offSetY = -7;
                 }
                 case 2 -> {
-                    offSetX = 0;
+                    offSetX = -7;
                     offSetY = 14;
                 }
                 case 3 -> {
                     offSetX = 14;
-                    offSetY = 28;
+                    offSetY = 30;
                 }
                 case 4 -> {
-                    offSetX = 28;
+                    offSetX = 30;
                     offSetY = 14;
                 }
 
@@ -197,6 +207,7 @@ public class Enemy extends GameObject {
 
             Bullet bullet = new Bullet(x + offSetX, y + offSetY, dir);
             bullets.add(bullet);
+            //Collision.coObjects.add(bullet);
             lastFiredTime = currentTime;
         }
     }
@@ -213,7 +224,7 @@ public class Enemy extends GameObject {
 
     @Override
     public void OnCollisionWith(CollisionEvent e) {
-        if (e.obj instanceof Brick || e.obj instanceof SteelBrick) {
+        if (e.obj instanceof Brick || e.obj instanceof SteelBrick|| e.obj instanceof River|| e.obj instanceof Base) {
             InputHandle();
         }
 

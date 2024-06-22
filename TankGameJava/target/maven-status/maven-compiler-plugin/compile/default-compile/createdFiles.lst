@@ -2,6 +2,7 @@ com\mycompany\tankgamejava\TankGameJava.class
 com\mycompany\tankgamejava\Sprite.class
 objects\GameObject.class
 com\mycompany\tankgamejava\ResourceManager.class
+level\LevelManager.class
 com\mycompany\tankgamejava\AnimationFrame.class
 objects\Player.class
 objects\PlayerState.class

@@ -9,6 +9,7 @@ import objects.Player;
 import objects.Enemy;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import level.LevelManager;
 import objects.Base;
 import objects.Brick;
 import objects.GameObject;
@@ -43,11 +45,14 @@ public final class Game extends JPanel implements Runnable {
     final int screenHeight = tileSize * maxScreenRow;
     final int FPS_SET = 120;
 
+    public boolean isGameOver = false;
     KeyHandler keyHandler;
     Thread gameThread;
+    LevelManager level;
     Player player;
     Enemy enemy1;
     Vector<GameObject> objects;
+   
     int mapData[][];
 
     private Game() {
@@ -61,15 +66,16 @@ public final class Game extends JPanel implements Runnable {
         addKeyListener(keyHandler);
         this.setFocusable(true);
         requestFocus();
-
+        level = new LevelManager(1, tileSize, maxScreenCol, maxScreenRow);
         loadResources();
+        objects = level.loadLevel();
         gameThread = new Thread(this);
         gameThread.start();
 
     }
 
     public void loadResources() {
-        objects = new Vector<>();
+       
         mapData = new int[maxScreenCol][maxScreenRow];
         ResourceManager res = ResourceManager.getInstance();
 
@@ -119,9 +125,9 @@ public final class Game extends JPanel implements Runnable {
         ani.Add(58);
         res.addAnimation(Util.ID_ANI_MOVING_RIGHT, ani);// moving right
 
-        player = new Player(128, 384);
+        player = new Player(128, 384, 3);
         //end player
-
+        
         //enemy1
         res.addSprite(9, 130, 2, 141, 14, tex);
         res.addSprite(10, 162, 1, 175, 14, tex);
@@ -165,10 +171,6 @@ public final class Game extends JPanel implements Runnable {
         ani1.Add(16);
         res.addAnimation(Util.ID_ENE1_MOVING_RIGHT, ani1);// moving right
 
-        enemy1 = new Enemy(150, 100);
-        objects.add(enemy1);
-        //endenemy1
-
         //tile
         res.addSprite(1, 256, 0, 271, 15, tex); // brick
         res.addSprite(2, 256, 16, 271, 31, tex); // steel brick
@@ -193,8 +195,6 @@ public final class Game extends JPanel implements Runnable {
         exploseAni.Add(152);
         res.addAnimation(Util.ID_ANI_EXPLOSION, exploseAni);
 
-        loadMap();
-
     }
 
     @Override
@@ -214,11 +214,13 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void Update() {
-        
+
         Collision.coObjects = objects;
         for (GameObject obj : objects) {
             obj.Update();
         }
+       
+      
         player.Update();
     }
 
@@ -230,14 +232,21 @@ public final class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (player != null) {
-            player.Render(g2);
+        if (isGameOver) {
+            g2.setColor(Color.RED);
+            g2.setFont(new Font("Arial", Font.BOLD, 50));
+            g2.drawString("GAME OVER", screenWidth / 2 - 150, screenHeight / 2);
+            g2.setFont(new Font("Arial", Font.BOLD, 20));
+            g2.drawString("Press R to Restart or Q to Quit", screenWidth / 2 - 130, screenHeight / 2 + 50);
+        } else {
+            if (player != null) {
+                player.Render(g2);   
+            }
+            for (GameObject obj : objects) {
+                obj.Render(g2);
+            }
+            
         }
-
-        for (GameObject obj : objects) {
-            obj.Render(g2);
-        }
-
         //renderMap(g2);
         g2.dispose();
     }
@@ -296,26 +305,12 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void removeObject(GameObject obj) {
-        
-        objects.remove(obj);
-    
-        //Collision.coObjects.remove(obj);
 
+        objects.remove(obj);
+
+        //Collision.coObjects.remove(obj);
     }
 
-    /*
-    void renderMap(Graphics2D g2) {
-        ResourceManager res = ResourceManager.getInstance();
-        for (int i = 0; i < maxScreenRow; i++) {
-            for (int j = 0; j < maxScreenCol; j++) {
-                int id = mapData[i][j];
-                if (id != 0) {
-                    res.getSprite(id).draw(g2, j * tileSize, i * tileSize, tileSize);
-                }
-
-            }
-        }
-    }*/
     public static Game getInstance() {
         if (instance == null) {
             instance = new Game();

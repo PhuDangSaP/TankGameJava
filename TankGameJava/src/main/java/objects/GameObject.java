@@ -19,6 +19,8 @@ public abstract class GameObject {
     protected float vy;
     protected int dir;
     public boolean isDead;
+    long deathTime = 0;
+    final int explosionDuration = 1000; 
     
     public GameObject(int x,int y)
     {
@@ -38,4 +40,9 @@ public abstract class GameObject {
     public abstract void Update();
     public abstract void Render(Graphics2D g2);
     
+    public void destroy()
+    {
+        isDead=true;
+         deathTime = System.currentTimeMillis();
+    }
 }

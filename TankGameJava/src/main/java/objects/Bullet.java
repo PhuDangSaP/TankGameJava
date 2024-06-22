@@ -4,6 +4,7 @@
  */
 package objects;
 
+import com.mycompany.tankgamejava.Collision;
 import com.mycompany.tankgamejava.CollisionEvent;
 import com.mycompany.tankgamejava.ResourceManager;
 import java.awt.Graphics2D;
@@ -24,7 +25,10 @@ public class Bullet extends GameObject {
 
     @Override
     public void Update() {
-        if(isDead) return;
+        if (isDead) {
+            return;
+        }
+        Collision.Process(this);
         switch (dir) {
             case 1 -> {
                 vx = 0;
@@ -50,7 +54,9 @@ public class Bullet extends GameObject {
 
     @Override
     public void Render(Graphics2D g2) {
-        if(isDead) return;
+        if (isDead) {
+            return;
+        }
         int spriteId = -1;
         switch (dir) {
             case 1 ->
@@ -62,7 +68,7 @@ public class Bullet extends GameObject {
             case 4 ->
                 spriteId = 103; //right
         }
-        ResourceManager.getInstance().getSprite(spriteId).draw(g2, x, y,5);
+        ResourceManager.getInstance().getSprite(spriteId).draw(g2, x, y, 5);
     }
 
     @Override
@@ -72,10 +78,15 @@ public class Bullet extends GameObject {
 
     @Override
     public void OnCollisionWith(CollisionEvent e) {
-        if(!(e.obj instanceof Grass))
-        {System.err.println("bullet hit");
-            isDead=true;
+        if (!(e.obj instanceof Grass)) {
+            isDead = true;
+            if (!(e.obj instanceof SteelBrick)) {
+                e.obj.destroy();
+              
+            }
+
         }
+
     }
 
     boolean isOffScreen() {

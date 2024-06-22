@@ -39,7 +39,7 @@ public class Collision {
 
         if (dx == 0 && dy == 0) {
             return null;
-        }
+        } 
 
         Rectangle rect = new Rectangle();
         rect.x = dx > 0 ? srcRect.x : srcRect.x + (int) dx;
