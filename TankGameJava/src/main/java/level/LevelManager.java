@@ -5,6 +5,8 @@
 package level;
 
 import com.mycompany.tankgamejava.Collision;
+import data.GameData;
+import data.SaveLoad;
 import gamestates.GameState;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
@@ -12,6 +14,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import objects.Base;
 import objects.Brick;
 import objects.Enemy;
@@ -31,6 +35,7 @@ public class LevelManager {
     private final int maxScreenCol;
     private final int maxScreenRow;
     Vector<GameObject> objects;
+    private int score;
 
     public LevelManager(int level, int tileSize, int maxScreenCol, int maxScreenRow) {
         this.currentLevel = level;
@@ -38,11 +43,13 @@ public class LevelManager {
         this.maxScreenCol = maxScreenCol;
         this.maxScreenRow = maxScreenRow;
         objects = new Vector<>();
+        score = 0;
         loadLevel();
     }
 
     public void loadLevel() {
         objects.clear();
+        objects.add(new Enemy(0, 0));
         try {
             File map = new File("Resources\\Level" + currentLevel + ".txt");
             BufferedReader br = new BufferedReader(new FileReader(map));
@@ -78,8 +85,6 @@ public class LevelManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        objects.add(new Enemy(0, 0));
     }
 
     public void Update() {
@@ -114,8 +119,17 @@ public class LevelManager {
             }
         }
         if (isWin) {
+            try {
+                SaveLoad.saveData(new GameData(currentLevel, score));
+            } catch (IOException ex) {
+                Logger.getLogger(LevelManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
             GameState.state = GameState.GAMEWIN;
         }
+    }
+
+    public void addScore(int point) {
+        score += point;
     }
 ;
 }

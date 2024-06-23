@@ -6,11 +6,16 @@ package gamestates;
 
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
+import data.GameData;
+import data.SaveLoad;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ui.MenuButton;
 
 /**
@@ -29,6 +34,7 @@ public class Menu implements StateMethods {
         buttons[0] = new MenuButton(200, 100, 100, 50, GameState.LEVELSELECTION, "Start");
         buttons[1] = new MenuButton(200, 200, 100, 50, GameState.LEADERBOARD, "Leaderboard");
         buttons[2] = new MenuButton(200, 300, 100, 50, GameState.EXIT, "Exit");
+        
     }
 
     @Override

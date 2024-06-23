@@ -71,9 +71,13 @@ public class Playing implements StateMethods {
     public void setLevel(int level)
     {
         levelManager.setLevel(level);
+        player = new Player(128, 384, 3);
     }
     public int getCurrentLevel()
     {
         return levelManager.getCurrentLevel();
+    }
+    public void addScore(int point) {
+        levelManager.addScore(point);
     }
 }

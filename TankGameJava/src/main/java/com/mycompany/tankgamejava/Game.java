@@ -8,10 +8,12 @@ import gamestates.GameOver;
 import gamestates.GameState;
 import static gamestates.GameState.GAMEOVER;
 import static gamestates.GameState.GAMEWIN;
+import static gamestates.GameState.LEADERBOARD;
 import static gamestates.GameState.LEVELSELECTION;
 import static gamestates.GameState.MENU;
 import static gamestates.GameState.PLAYING;
 import gamestates.GameWin;
+import gamestates.LeaderBoard;
 import gamestates.LevelSelection;
 import gamestates.Menu;
 import gamestates.Playing;
@@ -67,7 +69,7 @@ public final class Game extends JPanel implements Runnable {
     private LevelSelection levelSelection;
     private GameOver gameOver;
     private GameWin gameWin;
-
+    private LeaderBoard leaderBoard;
     private Game() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -92,6 +94,7 @@ public final class Game extends JPanel implements Runnable {
         levelSelection = new LevelSelection();
         gameOver = new GameOver();
         gameWin = new GameWin();
+        leaderBoard= new LeaderBoard();
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -251,6 +254,9 @@ public final class Game extends JPanel implements Runnable {
             case GAMEWIN->{
                 gameWin.Update();
             }
+            case LEADERBOARD->{
+                leaderBoard.Update();
+            }
             default -> {
             }
         }
@@ -288,6 +294,9 @@ public final class Game extends JPanel implements Runnable {
             }
             case GAMEWIN->{
                 gameWin.Render(g2);
+            }
+            case LEADERBOARD->{
+                leaderBoard.Render(g2);
             }
             default -> {
             }

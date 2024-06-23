@@ -21,8 +21,8 @@ public class GameOver implements StateMethods {
     private MenuButton[] buttons = new MenuButton[2];
 
     public GameOver() {
-        buttons[0] = new MenuButton(200, 100, 100, 50, GameState.LEVELSELECTION, "LevelSelection");
-        buttons[1] = new MenuButton(200, 200, 100, 50, GameState.PLAYING, "Restart");
+        buttons[0] = new MenuButton(200, 150, 100, 50, GameState.LEVELSELECTION, "LevelSelection");
+        buttons[1] = new MenuButton(200, 220, 100, 50, GameState.PLAYING, "Restart");
     }
 
     @Override
