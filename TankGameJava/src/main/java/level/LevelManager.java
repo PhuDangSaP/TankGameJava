@@ -49,17 +49,18 @@ public class LevelManager {
         this.maxScreenCol = maxScreenCol;
         this.maxScreenRow = maxScreenRow;
         objects = new Vector<>();
-        enemys =new Vector<>();
+        enemys = new Vector<>();
         score = 0;
         loadLevel();
     }
 
     public void loadLevel() {
         score = 0;
-        numSpawned=0;
+        numSpawned = 0;
         timeSinceLastSpawn = 0;
         lastTime = System.currentTimeMillis();
         objects.clear();
+        enemys.clear();
         try {
             File map = new File("Resources\\Level" + currentLevel + ".txt");
             BufferedReader br = new BufferedReader(new FileReader(map));
@@ -123,13 +124,12 @@ public class LevelManager {
             obj.Render(g2);
         }
         for (GameObject obj : objects) {
-            if(!(obj instanceof Enemy)){
-               obj.Render(g2);  
+            if (!(obj instanceof Enemy)) {
+                obj.Render(g2);
             }
-           
+
         }
-        
-        
+
     }
 
     public int getCurrentLevel() {
@@ -148,9 +148,8 @@ public class LevelManager {
                 isWin = false;
             }
         }
-        if(numSpawned<numToSpawn)
-        {
-            isWin=false;
+        if (numSpawned < numToSpawn) {
+            isWin = false;
         }
         if (isWin) {
             try {
@@ -163,7 +162,7 @@ public class LevelManager {
     }
 
     private void spawnEnemy() {
-        Enemy enemy= new Enemy(0, 0);
+        Enemy enemy = new Enemy(0, 0);
         objects.add(enemy);
         numSpawned++;
         enemys.add(enemy);

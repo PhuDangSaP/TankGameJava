@@ -89,6 +89,10 @@ public class Bullet extends GameObject {
             {
                 Game.getInstance().getPlaying().addScore(point);
             }
+            if(e.obj instanceof Player)
+            {
+                
+            }
 
         }
     }

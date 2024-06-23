@@ -43,6 +43,6 @@ public abstract class GameObject {
     public void destroy()
     {
         isDead=true;
-         deathTime = System.currentTimeMillis();
+        deathTime = System.currentTimeMillis();
     }
 }

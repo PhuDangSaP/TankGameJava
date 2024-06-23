@@ -14,7 +14,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-
+import gamestates.GameState;
 /**
  *
  * @author USER
@@ -35,7 +35,7 @@ public class Player extends GameObject {
     ArrayList<Bullet> bullets;
     final int fireRate = 500;
     long lastFiredTime = 0;
-    long deathTime = 0;
+    public long deathTime = 0;
     final int explosionDuration = 1000; 
     final int respawnTime = 2000; 
     long respawnStartTime = 0;
@@ -260,6 +260,7 @@ public class Player extends GameObject {
             y -= vy;
         }
     }
+    
 
     public void Respawn() {
         if (spawnCount > 0) {
@@ -271,6 +272,9 @@ public class Player extends GameObject {
             vy = 0;
             respawnStartTime = 0;
             spawnCount--; 
+        }
+        else {
+            GameState.state=GameState.GAMEOVER;
         }
     }
 }
