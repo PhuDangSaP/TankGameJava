@@ -44,6 +44,7 @@ public final class Game extends JPanel implements Runnable {
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
     final int FPS_SET = 120;
+    int levelstart = 0;
 
     public boolean isGameOver = false;
     KeyHandler keyHandler;
@@ -60,13 +61,17 @@ public final class Game extends JPanel implements Runnable {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
     }
+    
+     public void setLevel(int level) {
+        this.levelstart = level;
+    }
 
     public void init() {
         keyHandler = new KeyHandler();
         addKeyListener(keyHandler);
         this.setFocusable(true);
         requestFocus();
-        level = new LevelManager(1, tileSize, maxScreenCol, maxScreenRow);
+        level = new LevelManager(this.levelstart, tileSize, maxScreenCol, maxScreenRow);
         loadResources();
         objects = level.loadLevel();
         gameThread = new Thread(this);
@@ -267,7 +272,7 @@ public final class Game extends JPanel implements Runnable {
 
     public void loadMap() {
         try {
-            File map = new File("Resources\\Level1.txt");
+            File map = new File("Resources\\Level2.txt");
             BufferedReader br = new BufferedReader(new FileReader(map));
 
             int i = 0; // row

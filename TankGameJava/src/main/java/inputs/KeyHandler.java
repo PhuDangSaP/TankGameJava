@@ -4,6 +4,7 @@
  */
 package inputs;
 
+import com.mycompany.tankgamejava.MainMenuPanel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -15,6 +16,8 @@ public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     public boolean firePressed;
+    public String state;
+    MainMenuPanel menu;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -36,6 +39,21 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (state == "titlestate")
+        {
+            if (e.getKeyCode() == KeyEvent.VK_W)
+            {
+                menu.commandNum --;
+                if (menu.commandNum < 0)
+                    menu.commandNum = 2;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_S)
+            {
+                menu.commandNum ++;
+                if (menu.commandNum > 2)
+                    menu.commandNum = 0;
+            }
+        }
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W ->
                 upPressed = true;

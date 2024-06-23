@@ -45,7 +45,7 @@ public class Enemy extends GameObject {
         } else {
             Collision.Process(this);
             long currentTime = System.currentTimeMillis();
-            if (currentTime - lastInputTime >= 5000) {
+            if (currentTime - lastInputTime >= 15000) {
                 InputHandle();
                 lastInputTime = currentTime;
             }
