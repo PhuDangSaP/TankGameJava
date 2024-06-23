@@ -5,6 +5,8 @@
 package gamestates;
 
 import com.mycompany.tankgamejava.Game;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -32,12 +34,11 @@ public class GameOver implements StateMethods {
 
     @Override
     public void Render(Graphics2D g2) {
-        /*
-         g2.setColor(Color.RED);
-            g2.setFont(new Font("Arial", Font.BOLD, 50));
-            g2.drawString("GAME OVER", screenWidth / 2 - 150, screenHeight / 2);
-            g2.setFont(new Font("Arial", Font.BOLD, 20));
-            g2.drawString("Press R to Restart or Q to Quit", screenWidth / 2 - 130, screenHeight / 2 + 50);*/
+
+        g2.setColor(Color.RED);
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        g2.drawString("GAME OVER", Game.getInstance().screenWidth / 2 - 150, 50);
+   
         for (MenuButton mb : buttons) {
             mb.Render(g2);
         }
@@ -64,8 +65,7 @@ public class GameOver implements StateMethods {
             if (isIn(e, mb)) {
                 if (mb.isMousePressed()) {
                     mb.applyGameState();
-                    if(mb.equals(buttons[1]))
-                    {
+                    if (mb.equals(buttons[1])) {
                         Game.getInstance().getPlaying().setLevel(Game.getInstance().getPlaying().getCurrentLevel());
                     }
                 }

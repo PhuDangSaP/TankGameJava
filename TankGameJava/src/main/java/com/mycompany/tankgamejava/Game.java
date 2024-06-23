@@ -214,6 +214,8 @@ public final class Game extends JPanel implements Runnable {
         exploseAni.Add(152);
         res.addAnimation(Util.ID_ANI_EXPLOSION, exploseAni);
 
+        
+         res.addTexture(2, "Resources\\tank.png");
     }
 
     @Override

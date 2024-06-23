@@ -5,6 +5,9 @@
 package gamestates;
 
 import com.mycompany.tankgamejava.Game;
+import com.mycompany.tankgamejava.ResourceManager;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -37,6 +40,10 @@ public class Menu implements StateMethods {
 
     @Override
     public void Render(Graphics2D g2) {
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        g2.drawString("TANK GAME", Game.getInstance().screenWidth / 2 - 150, 50);
+        g2.drawImage(ResourceManager.getInstance().getTexture(2).image,Game.getInstance().screenWidth / 2-16, 60,32, 32, null);
         for (MenuButton mb : buttons) {
             mb.Render(g2);
         }
