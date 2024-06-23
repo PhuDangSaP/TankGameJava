@@ -80,7 +80,7 @@ public class Bullet extends GameObject {
     public void OnCollisionWith(CollisionEvent e) {
         if (!(e.obj instanceof Grass)) {
             isDead = true;
-            if (!(e.obj instanceof SteelBrick)) {
+            if (!(e.obj instanceof SteelBrick)&&!(e.obj instanceof River)) {
                 e.obj.destroy();
               
             }

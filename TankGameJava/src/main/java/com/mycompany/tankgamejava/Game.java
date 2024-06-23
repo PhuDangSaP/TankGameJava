@@ -4,7 +4,19 @@
  */
 package com.mycompany.tankgamejava;
 
+import gamestates.GameOver;
+import gamestates.GameState;
+import static gamestates.GameState.GAMEOVER;
+import static gamestates.GameState.GAMEWIN;
+import static gamestates.GameState.LEVELSELECTION;
+import static gamestates.GameState.MENU;
+import static gamestates.GameState.PLAYING;
+import gamestates.GameWin;
+import gamestates.LevelSelection;
+import gamestates.Menu;
+import gamestates.Playing;
 import inputs.KeyHandler;
+import inputs.MouseHandler;
 import objects.Player;
 import objects.Enemy;
 import java.awt.Color;
@@ -38,22 +50,23 @@ import objects.SteelBrick;
 public final class Game extends JPanel implements Runnable {
 
     private static Game instance;
-    final int tileSize = 32;
-    final int maxScreenCol = 13;
-    final int maxScreenRow = 13;
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
-    final int FPS_SET = 120;
+    public final int tileSize = 32;
+    public final int maxScreenCol = 13;
+    public final int maxScreenRow = 13;
+    public final int screenWidth = tileSize * maxScreenCol;
+    public final int screenHeight = tileSize * maxScreenRow;
+    public final int FPS_SET = 120;
 
     public boolean isGameOver = false;
-    KeyHandler keyHandler;
-    Thread gameThread;
-    LevelManager level;
-    Player player;
-    Enemy enemy1;
-    Vector<GameObject> objects;
-   
-    int mapData[][];
+    private KeyHandler keyHandler;
+    private MouseHandler mouseHandler;
+    private Thread gameThread;
+
+    private Playing playing;
+    private Menu menu;
+    private LevelSelection levelSelection;
+    private GameOver gameOver;
+    private GameWin gameWin;
 
     private Game() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -63,20 +76,28 @@ public final class Game extends JPanel implements Runnable {
 
     public void init() {
         keyHandler = new KeyHandler();
+        mouseHandler = new MouseHandler();
         addKeyListener(keyHandler);
+        addMouseListener(mouseHandler);
+        addMouseMotionListener(mouseHandler);
         this.setFocusable(true);
         requestFocus();
-        level = new LevelManager(1, tileSize, maxScreenCol, maxScreenRow);
         loadResources();
-        objects = level.loadLevel();
+        start();
+    }
+
+    public void start() {
+        playing = new Playing(1);
+        menu = new Menu();
+        levelSelection = new LevelSelection();
+        gameOver = new GameOver();
+        gameWin = new GameWin();
         gameThread = new Thread(this);
         gameThread.start();
-
     }
 
     public void loadResources() {
-       
-        mapData = new int[maxScreenCol][maxScreenRow];
+
         ResourceManager res = ResourceManager.getInstance();
 
         res.addTexture(1, "Resources\\General.png");
@@ -125,9 +146,7 @@ public final class Game extends JPanel implements Runnable {
         ani.Add(58);
         res.addAnimation(Util.ID_ANI_MOVING_RIGHT, ani);// moving right
 
-        player = new Player(128, 384, 3);
         //end player
-        
         //enemy1
         res.addSprite(9, 130, 2, 141, 14, tex);
         res.addSprite(10, 162, 1, 175, 14, tex);
@@ -214,38 +233,62 @@ public final class Game extends JPanel implements Runnable {
     }
 
     public void Update() {
-
-        Collision.coObjects = objects;
-        for (GameObject obj : objects) {
-            obj.Update();
+        switch (GameState.state) {
+            case MENU -> {
+                menu.Update();
+            }
+            case PLAYING -> {
+                playing.Update();
+            }
+            case LEVELSELECTION -> {
+                levelSelection.Update();
+            }
+            case GAMEOVER->{
+                gameOver.Update();
+            }
+            case GAMEWIN->{
+                gameWin.Update();
+            }
+            default -> {
+            }
         }
-       
-      
-        player.Update();
+
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        if (objects == null) {
-            return;
-        }
+
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
+        /*
         if (isGameOver) {
             g2.setColor(Color.RED);
             g2.setFont(new Font("Arial", Font.BOLD, 50));
             g2.drawString("GAME OVER", screenWidth / 2 - 150, screenHeight / 2);
             g2.setFont(new Font("Arial", Font.BOLD, 20));
             g2.drawString("Press R to Restart or Q to Quit", screenWidth / 2 - 130, screenHeight / 2 + 50);
-        } else {
-            if (player != null) {
-                player.Render(g2);   
+        } */
+        switch (GameState.state) {
+            case MENU -> {
+                menu.Render(g2);
             }
-            for (GameObject obj : objects) {
-                obj.Render(g2);
+            case PLAYING -> {
+                if (playing == null) {
+                    return;
+                }
+                playing.Render(g2);
             }
-            
+            case LEVELSELECTION -> {
+                levelSelection.Render(g2);
+            }
+            case GAMEOVER->{
+                gameOver.Render(g2);
+            }
+            case GAMEWIN->{
+                gameWin.Render(g2);
+            }
+            default -> {
+            }
         }
         //renderMap(g2);
         g2.dispose();
@@ -265,50 +308,24 @@ public final class Game extends JPanel implements Runnable {
         return new Texture(image);
     }
 
-    public void loadMap() {
-        try {
-            File map = new File("Resources\\Level1.txt");
-            BufferedReader br = new BufferedReader(new FileReader(map));
-
-            int i = 0; // row
-            int j = 0; // col
-            while (i < maxScreenRow && j < maxScreenCol) {
-                String line = br.readLine();
-                while (j < maxScreenRow) {
-                    String numbers[] = line.split(" ");
-                    int num = Integer.parseInt(numbers[j]);
-
-                    switch (num) {
-                        case 1 ->
-                            objects.add(new Brick(j * tileSize, i * tileSize));
-                        case 2 ->
-                            objects.add(new SteelBrick(j * tileSize, i * tileSize));
-                        case 3 ->
-                            objects.add(new Grass(j * tileSize, i * tileSize));
-                        case 4 ->
-                            objects.add(new River(j * tileSize, i * tileSize));
-                        case 5 ->
-                            objects.add(new Base(j * tileSize, i * tileSize));
-                    }
-                    mapData[i][j] = num;
-                    j++;
-                }
-                if (j == maxScreenCol) {
-                    j = 0;
-                    i++;
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Menu getMenu() {
+        return menu;
     }
 
-    public void removeObject(GameObject obj) {
+    public Playing getPlaying() {
+        return playing;
+    }
 
-        objects.remove(obj);
+    public LevelSelection getLevelSelection() {
+        return levelSelection;
+    }
 
-        //Collision.coObjects.remove(obj);
+    public GameOver getGameOver() {
+        return gameOver;
+    }
+
+    public GameWin getGameWin() {
+        return gameWin;
     }
 
     public static Game getInstance() {

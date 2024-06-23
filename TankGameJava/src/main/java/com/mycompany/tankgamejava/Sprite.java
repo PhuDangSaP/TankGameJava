@@ -30,17 +30,19 @@ public class Sprite {
         this.image = texture.image.getSubimage(left, top, right - left, bottom - top);
     }
 
-    public void draw(Graphics2D g2, int x, int y ,int size) {
+    public void draw(Graphics2D g2, int x, int y, int size) {
         g2.drawImage(image, x, y, size, size, null);
 
-}
-    public void draw(Graphics2D g2,int x,int y)
-    {      
-        g2.drawImage(image, x,y,30,30, null);
+    }
+    public void draw(Graphics2D g2, int x, int y, int width,int height) {
+        g2.drawImage(image, x, y, width, height, null);
 
     }
-    
 
+    public void draw(Graphics2D g2, int x, int y) {
+        g2.drawImage(image, x, y, 30, 30, null);
+
+    }
 
     public Rectangle getBoundingBox() {
         return new Rectangle(0, 0, right - left, bottom - top);

@@ -4,6 +4,9 @@
  */
 package level;
 
+import com.mycompany.tankgamejava.Collision;
+import gamestates.GameState;
+import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -22,22 +25,24 @@ import objects.SteelBrick;
  * @author USER
  */
 public class LevelManager {
+
     private int currentLevel;
     private final int tileSize;
     private final int maxScreenCol;
     private final int maxScreenRow;
-    
-    public LevelManager(int level,int tileSize,int maxScreenCol,int maxScreenRow)
-    {
-        this.currentLevel=level;
-        this.tileSize=tileSize;
-        this.maxScreenCol=maxScreenCol;
-        this.maxScreenRow=maxScreenRow;
+    Vector<GameObject> objects;
+
+    public LevelManager(int level, int tileSize, int maxScreenCol, int maxScreenRow) {
+        this.currentLevel = level;
+        this.tileSize = tileSize;
+        this.maxScreenCol = maxScreenCol;
+        this.maxScreenRow = maxScreenRow;
+        objects = new Vector<>();
+        loadLevel();
     }
-    
-    public Vector<GameObject> loadLevel()
-    {
-        Vector<GameObject> objects= new Vector<>();
+
+    public void loadLevel() {
+        objects.clear();
         try {
             File map = new File("Resources\\Level" + currentLevel + ".txt");
             BufferedReader br = new BufferedReader(new FileReader(map));
@@ -51,11 +56,16 @@ public class LevelManager {
                     int num = Integer.parseInt(numbers[j]);
 
                     switch (num) {
-                        case 1 -> objects.add(new Brick(j * tileSize, i * tileSize));
-                        case 2 -> objects.add(new SteelBrick(j * tileSize, i * tileSize));
-                        case 3 -> objects.add(new Grass(j * tileSize, i * tileSize));
-                        case 4 -> objects.add(new River(j * tileSize, i * tileSize));
-                        case 5 -> objects.add(new Base(j * tileSize, i * tileSize));
+                        case 1 ->
+                            objects.add(new Brick(j * tileSize, i * tileSize));
+                        case 2 ->
+                            objects.add(new SteelBrick(j * tileSize, i * tileSize));
+                        case 3 ->
+                            objects.add(new Grass(j * tileSize, i * tileSize));
+                        case 4 ->
+                            objects.add(new River(j * tileSize, i * tileSize));
+                        case 5 ->
+                            objects.add(new Base(j * tileSize, i * tileSize));
                     }
                     j++;
                 }
@@ -68,9 +78,44 @@ public class LevelManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-              
-      
+
         objects.add(new Enemy(0, 0));
-        return objects;
     }
+
+    public void Update() {
+        checkGameWin();
+        Collision.coObjects = objects;
+        for (GameObject obj : objects) {
+            obj.Update();
+        }
+
+    }
+
+    public void Render(Graphics2D g2) {
+        for (GameObject obj : objects) {
+            obj.Render(g2);
+        }
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setLevel(int level) {
+        this.currentLevel = level;
+        loadLevel();
+    }
+
+    public void checkGameWin() {
+        boolean isWin = true;
+        for (GameObject obj : objects) {
+            if (obj instanceof Enemy && !obj.isDead) {
+                isWin = false;
+            }
+        }
+        if (isWin) {
+            GameState.state = GameState.GAMEWIN;
+        }
+    }
+;
 }

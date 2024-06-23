@@ -11,6 +11,7 @@ import com.mycompany.tankgamejava.ResourceManager;
 import com.mycompany.tankgamejava.Util;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import gamestates.GameState;
 
 /**
  *
@@ -29,6 +30,7 @@ public class Base extends GameObject {
             long currentTime = System.currentTimeMillis();
             if (currentTime - deathTime > explosionDuration) {
                 Game.getInstance().isGameOver=true;
+                GameState.state=GameState.GAMEOVER;
                 return;
             }
         }
