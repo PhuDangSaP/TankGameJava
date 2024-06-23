@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import gamestates.GameState;
 import static gamestates.GameState.GAMEOVER;
 import static gamestates.GameState.GAMEWIN;
+import static gamestates.GameState.LEADERBOARD;
 import static gamestates.GameState.LEVELSELECTION;
 import static gamestates.GameState.MENU;
 import static gamestates.GameState.PLAYING;
@@ -60,6 +61,9 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
             case GAMEWIN:
                 Game.getInstance().getGameWin().mousePressed(e);
                 break;
+            case LEADERBOARD:
+                Game.getInstance().getLeaderBoard().mousePressed(e);
+                break;
             default:
                 break;
         }
@@ -81,6 +85,9 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
                 break;
             case GAMEWIN:
                 Game.getInstance().getGameWin().mouseReleased(e);
+                break;
+            case LEADERBOARD:
+                Game.getInstance().getLeaderBoard().mouseReleased(e);
                 break;
             default:
                 break;

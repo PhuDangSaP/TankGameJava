@@ -36,6 +36,11 @@ public class LevelManager {
     private final int maxScreenRow;
     Vector<GameObject> objects;
     private int score;
+    private long spawnDelay = 2000;
+    private long timeSinceLastSpawn = 0;
+    private int numToSpawn = 1;
+    private int numSpawned = 0;
+    private long lastTime = System.currentTimeMillis();
 
     public LevelManager(int level, int tileSize, int maxScreenCol, int maxScreenRow) {
         this.currentLevel = level;
@@ -48,8 +53,11 @@ public class LevelManager {
     }
 
     public void loadLevel() {
+        score = 0;
+        numSpawned=0;
+        timeSinceLastSpawn = 0;
+        lastTime = System.currentTimeMillis();
         objects.clear();
-        objects.add(new Enemy(0, 0));
         try {
             File map = new File("Resources\\Level" + currentLevel + ".txt");
             BufferedReader br = new BufferedReader(new FileReader(map));
@@ -81,6 +89,10 @@ public class LevelManager {
                     i++;
                 }
             }
+            String line = br.readLine();
+            if (line != null) {
+                numToSpawn = Integer.parseInt(line);
+            }
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,6 +104,14 @@ public class LevelManager {
         Collision.coObjects = objects;
         for (GameObject obj : objects) {
             obj.Update();
+        }
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - lastTime;
+        lastTime = currentTime;
+        timeSinceLastSpawn += elapsedTime;
+        if (timeSinceLastSpawn >= spawnDelay && numSpawned < numToSpawn) {
+            spawnEnemy();
+            timeSinceLastSpawn = 0;
         }
 
     }
@@ -118,6 +138,10 @@ public class LevelManager {
                 isWin = false;
             }
         }
+        if(numSpawned<numToSpawn)
+        {
+            isWin=false;
+        }
         if (isWin) {
             try {
                 SaveLoad.saveData(new GameData(currentLevel, score));
@@ -128,8 +152,12 @@ public class LevelManager {
         }
     }
 
+    private void spawnEnemy() {
+        objects.add(new Enemy(0, 0));
+        numSpawned++;
+    }
+
     public void addScore(int point) {
         score += point;
     }
-;
 }

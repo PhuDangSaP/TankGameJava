@@ -70,6 +70,7 @@ public final class Game extends JPanel implements Runnable {
     private GameOver gameOver;
     private GameWin gameWin;
     private LeaderBoard leaderBoard;
+
     private Game() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -94,7 +95,7 @@ public final class Game extends JPanel implements Runnable {
         levelSelection = new LevelSelection();
         gameOver = new GameOver();
         gameWin = new GameWin();
-        leaderBoard= new LeaderBoard();
+        leaderBoard = new LeaderBoard();
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -217,8 +218,7 @@ public final class Game extends JPanel implements Runnable {
         exploseAni.Add(152);
         res.addAnimation(Util.ID_ANI_EXPLOSION, exploseAni);
 
-        
-         res.addTexture(2, "Resources\\tank.png");
+        res.addTexture(2, "Resources\\tank.png");
     }
 
     @Override
@@ -248,13 +248,13 @@ public final class Game extends JPanel implements Runnable {
             case LEVELSELECTION -> {
                 levelSelection.Update();
             }
-            case GAMEOVER->{
+            case GAMEOVER -> {
                 gameOver.Update();
             }
-            case GAMEWIN->{
+            case GAMEWIN -> {
                 gameWin.Update();
             }
-            case LEADERBOARD->{
+            case LEADERBOARD -> {
                 leaderBoard.Update();
             }
             default -> {
@@ -278,6 +278,9 @@ public final class Game extends JPanel implements Runnable {
         } */
         switch (GameState.state) {
             case MENU -> {
+                if (menu == null) {
+                    return;
+                }
                 menu.Render(g2);
             }
             case PLAYING -> {
@@ -289,13 +292,13 @@ public final class Game extends JPanel implements Runnable {
             case LEVELSELECTION -> {
                 levelSelection.Render(g2);
             }
-            case GAMEOVER->{
+            case GAMEOVER -> {
                 gameOver.Render(g2);
             }
-            case GAMEWIN->{
+            case GAMEWIN -> {
                 gameWin.Render(g2);
             }
-            case LEADERBOARD->{
+            case LEADERBOARD -> {
                 leaderBoard.Render(g2);
             }
             default -> {
@@ -337,6 +340,10 @@ public final class Game extends JPanel implements Runnable {
 
     public GameWin getGameWin() {
         return gameWin;
+    }
+
+    public LeaderBoard getLeaderBoard() {
+        return leaderBoard;
     }
 
     public static Game getInstance() {

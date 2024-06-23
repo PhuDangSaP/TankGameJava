@@ -26,7 +26,7 @@ public class LeaderBoard implements StateMethods {
     private int[] scores;
 
     public LeaderBoard() {
-        backButton = new MenuButton(0, 0, 100, 50, GameState.MENU, "Back");
+        backButton = new MenuButton(50, 10, 50, 30, GameState.MENU, "Back");
         scores = new int[20];
         getScores();
     }
@@ -38,7 +38,7 @@ public class LeaderBoard implements StateMethods {
 
     @Override
     public void Render(Graphics2D g2) {
- 
+
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 10));
         g2.drawString("Level", 100, 20);
@@ -48,6 +48,7 @@ public class LeaderBoard implements StateMethods {
             g2.drawString("Level " + (i + 1), 100, 50 + i * 18);
             g2.drawString(String.valueOf(scores[i]), 200, 50 + i * 18);
         }
+        backButton.Render(g2);
     }
 
     @Override
@@ -57,12 +58,21 @@ public class LeaderBoard implements StateMethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (isIn(e, backButton)) {
+            backButton.setMousePressed(true);
 
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (isIn(e, backButton)) {
+            if (backButton.isMousePressed()) {
+                backButton.applyGameState();
+            }
 
+        }
+        resetButtons();
     }
 
     @Override
@@ -81,7 +91,7 @@ public class LeaderBoard implements StateMethods {
     }
 
     public void getScores() {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 20; i++) {
             try {
                 GameData data = SaveLoad.getData(i + 1);
                 scores[i] = data.getScore();
@@ -90,6 +100,14 @@ public class LeaderBoard implements StateMethods {
                 scores[i] = 0;
             }
         }
+    }
+
+    private void resetButtons() {
+        backButton.resetBools();
+    }
+
+    public boolean isIn(MouseEvent e, MenuButton mb) {
+        return mb.getBoundingBox().contains(e.getX(), e.getY());
     }
 
 }
