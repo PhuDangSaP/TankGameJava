@@ -7,6 +7,7 @@ package com.mycompany.tankgamejava;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Vector;
+import objects.Bullet;
 import objects.GameObject;
 
 /**
@@ -20,6 +21,7 @@ enum CollisionDir {
 public class Collision {
 
     public static Vector<GameObject> coObjects;
+    public static GameObject player;
 
     public static CollisionEvent SweptAABB(GameObject src, GameObject dest) {
         if (src.isDead || dest.isDead) {
@@ -53,12 +55,51 @@ public class Collision {
         return null;
 
     }
+    public static CollisionEvent CheckCollidePlayer(GameObject src)
+    {
+        if (src.isDead || player.isDead) {
+            return null;
+        }
+        float Sdx = src.getSpeedX();
+        float Sdy = src.getSpeedY();
+
+        float Ddx = player.getSpeedX();
+        float Ddy = player.getSpeedY();
+
+        float dx = Sdx - Ddx;
+        float dy = Sdy - Ddy;
+
+        Rectangle srcRect = src.getBoundingBox();
+        Rectangle destRect = player.getBoundingBox();
+
+        if (dx == 0 && dy == 0) {
+            return null;
+        } 
+
+        Rectangle rect = new Rectangle();
+        rect.x = dx > 0 ? srcRect.x : srcRect.x + (int) dx;
+        rect.width = dx > 0 ? srcRect.width + (int) dx : srcRect.width;
+        rect.y = dy > 0 ? srcRect.y + (int) dy : srcRect.y;
+        rect.height = dy > 0 ? srcRect.height : srcRect.height + (int) dy;
+
+        if (rect.intersects(destRect)) {
+            return new CollisionEvent(player, CollisionDir.UP);
+        }
+        return null;
+    }
 
     public static void Process(GameObject objSrc) {
         ArrayList<CollisionEvent> coEvents = new ArrayList<>();
 
         for (GameObject obj : coObjects) {
             CollisionEvent e = SweptAABB(objSrc, obj);
+            if (e != null) {
+                coEvents.add(e);
+            }
+        }
+        if(objSrc instanceof Bullet)
+        {
+            CollisionEvent e= CheckCollidePlayer(objSrc);
             if (e != null) {
                 coEvents.add(e);
             }

@@ -4,6 +4,7 @@
  */
 package gamestates;
 
+import com.mycompany.tankgamejava.Collision;
 import com.mycompany.tankgamejava.Game;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -28,7 +29,7 @@ public class Playing implements StateMethods {
 
     @Override
     public void Update() {
-        
+        Collision.player=player;
         levelManager.Update();
         player.Update();
     }
