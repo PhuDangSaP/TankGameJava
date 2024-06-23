@@ -41,6 +41,7 @@ public class LevelManager {
     private int numToSpawn = 1;
     private int numSpawned = 0;
     private long lastTime = System.currentTimeMillis();
+    Vector<GameObject> enemys;
 
     public LevelManager(int level, int tileSize, int maxScreenCol, int maxScreenRow) {
         this.currentLevel = level;
@@ -48,6 +49,7 @@ public class LevelManager {
         this.maxScreenCol = maxScreenCol;
         this.maxScreenRow = maxScreenRow;
         objects = new Vector<>();
+        enemys =new Vector<>();
         score = 0;
         loadLevel();
     }
@@ -117,9 +119,17 @@ public class LevelManager {
     }
 
     public void Render(Graphics2D g2) {
-        for (GameObject obj : objects) {
+        for (GameObject obj : enemys) {
             obj.Render(g2);
         }
+        for (GameObject obj : objects) {
+            if(!(obj instanceof Enemy)){
+               obj.Render(g2);  
+            }
+           
+        }
+        
+        
     }
 
     public int getCurrentLevel() {
@@ -153,8 +163,10 @@ public class LevelManager {
     }
 
     private void spawnEnemy() {
-        objects.add(new Enemy(0, 0));
+        Enemy enemy= new Enemy(0, 0);
+        objects.add(enemy);
         numSpawned++;
+        enemys.add(enemy);
     }
 
     public void addScore(int point) {
