@@ -56,7 +56,7 @@ public class Player extends GameObject {
 
     @Override
     public void Update() {
-        if (isDead) {
+        if (isDead) { 
             long currentTime = System.currentTimeMillis();
             if (currentTime - deathTime > explosionDuration) {
                 if (respawnStartTime == 0) {
@@ -158,7 +158,10 @@ public class Player extends GameObject {
     @Override
     public void Render(Graphics2D g2) {
         if (isDead) {
+           
             long currentTime = System.currentTimeMillis();
+            System.err.println(currentTime+"---"+deathTime);
+            
             if (currentTime - deathTime <= explosionDuration) {
                 ResourceManager.getInstance().getAnimation(Util.ID_ANI_EXPLOSION).Render(g2, x, y, 28);
             }
@@ -214,18 +217,18 @@ public class Player extends GameObject {
             switch (dir) {
                 case 1 -> {
                     offSetX = 14;
-                    offSetY = -2;
+                    offSetY = -7;
                 }
                 case 2 -> {
-                    offSetX = -2;
+                    offSetX = -7;
                     offSetY = 14;
                 }
                 case 3 -> {
                     offSetX = 16;
-                    offSetY = 28;
+                    offSetY = 30;
                 }
                 case 4 -> {
-                    offSetX = 28;
+                    offSetX = 30;
                     offSetY = 16;
                 }
             }

@@ -19,7 +19,6 @@ gamestates\LevelSelection.class
 objects\SteelBrick.class
 com\mycompany\tankgamejava\Game$1.class
 objects\Grass.class
-com\mycompany\tankgamejava\CollisionDir.class
 data\SaveLoad.class
 objects\EnemyState.class
 objects\Bullet.class

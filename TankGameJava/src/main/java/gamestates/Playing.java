@@ -31,7 +31,9 @@ public class Playing implements StateMethods {
     public void Update() {
         Collision.player=player;
         levelManager.Update();
+        System.err.println("Check:"+player.deathTime);
         player.Update();
+        System.err.println("Again:"+player.deathTime);
     }
 
     @Override
