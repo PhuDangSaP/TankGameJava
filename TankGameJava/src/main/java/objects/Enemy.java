@@ -4,6 +4,7 @@ import com.mycompany.tankgamejava.Collision;
 import com.mycompany.tankgamejava.CollisionEvent;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
+import com.mycompany.tankgamejava.Sound;
 import com.mycompany.tankgamejava.Util;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -21,6 +22,7 @@ enum EnemyState {
 }
 
 public class Enemy extends GameObject {
+
     final int speed = 1;
     EnemyState state;
     final int fireRate = 2000;
@@ -118,13 +120,12 @@ public class Enemy extends GameObject {
             vy = speed;
             vx = 0;
             dir = 3;
-        }
-        else if (dirY < 0) {
+        } else if (dirY < 0) {
             state = EnemyState.MOVING_UP;
             vy = -speed;
             vx = 0;
             dir = 1;
-        }else {
+        } else {
             state = EnemyState.IDLE;
             vx = 0;
             vy = 0;
@@ -157,7 +158,7 @@ public class Enemy extends GameObject {
                         Util.ID_ENE1_IDLE_RIGHT;
                 };
             }
-             case EnemyState.MOVING_UP ->
+            case EnemyState.MOVING_UP ->
                 aniId = Util.ID_ENE1_MOVING_UP;
             case EnemyState.MOVING_LEFT ->
                 aniId = Util.ID_ENE1_MOVING_LEFT;
@@ -207,6 +208,7 @@ public class Enemy extends GameObject {
 
             Bullet bullet = new Bullet(x + offSetX, y + offSetY, dir);
             bullets.add(bullet);
+            Sound.fireSound();
             //Collision.coObjects.add(bullet);
             lastFiredTime = currentTime;
         }
@@ -224,7 +226,16 @@ public class Enemy extends GameObject {
 
     @Override
     public void OnCollisionWith(CollisionEvent e) {
-        if (e.obj instanceof Brick || e.obj instanceof SteelBrick|| e.obj instanceof River|| e.obj instanceof Base) {
+        if (e.obj instanceof Brick || e.obj instanceof SteelBrick || e.obj instanceof River || e.obj instanceof Base) {
+            if (vx > 0) {
+                x = e.obj.x - 32;
+            } else if (vx < 0) {
+                x = e.obj.x + 32;
+            } else if (vy > 0) {
+                y = e.obj.y - 32;
+            } else {
+                y = e.obj.y + 32;
+            }
             InputHandle();
         }
 
@@ -232,6 +243,7 @@ public class Enemy extends GameObject {
             isDead = true;
             deathTime = System.currentTimeMillis();
             state = EnemyState.DEAD;
+            Sound.explosion();
         }
     }
 

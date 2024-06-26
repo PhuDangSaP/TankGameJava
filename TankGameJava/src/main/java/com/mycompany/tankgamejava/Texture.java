@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  * @author USER
  */
 public class Texture {
-    BufferedImage image;
+    public BufferedImage image;
     
     public Texture(BufferedImage image)
     {

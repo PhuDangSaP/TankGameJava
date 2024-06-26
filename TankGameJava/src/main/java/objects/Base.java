@@ -8,9 +8,11 @@ import com.mycompany.tankgamejava.Collision;
 import com.mycompany.tankgamejava.CollisionEvent;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
+import com.mycompany.tankgamejava.Sound;
 import com.mycompany.tankgamejava.Util;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import gamestates.GameState;
 
 /**
  *
@@ -29,6 +31,8 @@ public class Base extends GameObject {
             long currentTime = System.currentTimeMillis();
             if (currentTime - deathTime > explosionDuration) {
                 Game.getInstance().isGameOver=true;
+                GameState.state=GameState.GAMEOVER;
+                Sound.gameOver();
                 return;
             }
         }
@@ -59,6 +63,7 @@ public class Base extends GameObject {
     public void OnCollisionWith(CollisionEvent e) {
         if (e.obj instanceof Bullet) {
             System.err.println("GameOver");
+            Sound.explosion();
             e.obj.isDead = true;
             isDead=true;
             deathTime = System.currentTimeMillis();

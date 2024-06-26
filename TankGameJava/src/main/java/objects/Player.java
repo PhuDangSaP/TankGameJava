@@ -9,12 +9,13 @@ import com.mycompany.tankgamejava.CollisionEvent;
 import inputs.KeyHandler;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
+import com.mycompany.tankgamejava.Sound;
 import com.mycompany.tankgamejava.Util;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-
+import gamestates.GameState;
 /**
  *
  * @author USER
@@ -35,7 +36,7 @@ public class Player extends GameObject {
     ArrayList<Bullet> bullets;
     final int fireRate = 500;
     long lastFiredTime = 0;
-    long deathTime = 0;
+    public long deathTime = 0;
     final int explosionDuration = 1000; 
     final int respawnTime = 2000; 
     long respawnStartTime = 0;
@@ -56,7 +57,7 @@ public class Player extends GameObject {
 
     @Override
     public void Update() {
-        if (isDead) {
+        if (isDead) { 
             long currentTime = System.currentTimeMillis();
             if (currentTime - deathTime > explosionDuration) {
                 if (respawnStartTime == 0) {
@@ -158,7 +159,10 @@ public class Player extends GameObject {
     @Override
     public void Render(Graphics2D g2) {
         if (isDead) {
+           
             long currentTime = System.currentTimeMillis();
+            System.err.println(currentTime+"---"+deathTime);
+            
             if (currentTime - deathTime <= explosionDuration) {
                 ResourceManager.getInstance().getAnimation(Util.ID_ANI_EXPLOSION).Render(g2, x, y, 28);
             }
@@ -214,24 +218,25 @@ public class Player extends GameObject {
             switch (dir) {
                 case 1 -> {
                     offSetX = 14;
-                    offSetY = -2;
+                    offSetY = -7;
                 }
                 case 2 -> {
-                    offSetX = -2;
+                    offSetX = -7;
                     offSetY = 14;
                 }
                 case 3 -> {
                     offSetX = 16;
-                    offSetY = 28;
+                    offSetY = 30;
                 }
                 case 4 -> {
-                    offSetX = 28;
+                    offSetX = 30;
                     offSetY = 16;
                 }
             }
 
             Bullet bullet = new Bullet(x + offSetX, y + offSetY, dir);
             bullets.add(bullet);
+            Sound.fireSound();
             //Collision.coObjects.add(bullet);
             lastFiredTime = currentTime;
         }
@@ -248,6 +253,7 @@ public class Player extends GameObject {
             isDead = true;
             deathTime = System.currentTimeMillis();
             state = PlayerState.DEAD;
+            Sound.explosion();
             System.err.println(e.obj.getClass());
             if(e.obj instanceof Bullet)
             {
@@ -260,6 +266,7 @@ public class Player extends GameObject {
             y -= vy;
         }
     }
+    
 
     public void Respawn() {
         if (spawnCount > 0) {
@@ -271,6 +278,10 @@ public class Player extends GameObject {
             vy = 0;
             respawnStartTime = 0;
             spawnCount--; 
+        }
+        else {
+            GameState.state=GameState.GAMEOVER;
+            Sound.gameOver();
         }
     }
 }
