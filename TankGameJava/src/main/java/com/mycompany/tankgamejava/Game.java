@@ -52,22 +52,12 @@ import objects.SteelBrick;
 public final class Game extends JPanel implements Runnable {
 
     private static Game instance;
-<<<<<<< HEAD
-    final int tileSize = 32;
-    final int maxScreenCol = 13;
-    final int maxScreenRow = 13;
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
-    final int FPS_SET = 120;
-    int levelstart = 0;
-=======
     public final int tileSize = 32;
     public final int maxScreenCol = 13;
     public final int maxScreenRow = 13;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
     public final int FPS_SET = 120;
->>>>>>> ui
 
     public boolean isGameOver = false;
     private KeyHandler keyHandler;
@@ -86,10 +76,6 @@ public final class Game extends JPanel implements Runnable {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
     }
-    
-     public void setLevel(int level) {
-        this.levelstart = level;
-    }
 
     public void init() {
         keyHandler = new KeyHandler();
@@ -99,10 +85,6 @@ public final class Game extends JPanel implements Runnable {
         addMouseMotionListener(mouseHandler);
         this.setFocusable(true);
         requestFocus();
-<<<<<<< HEAD
-        level = new LevelManager(this.levelstart, tileSize, maxScreenCol, maxScreenRow);
-=======
->>>>>>> ui
         loadResources();
         start();
     }
@@ -340,48 +322,8 @@ public final class Game extends JPanel implements Runnable {
         return new Texture(image);
     }
 
-<<<<<<< HEAD
-    public void loadMap() {
-        try {
-            File map = new File("Resources\\Level2.txt");
-            BufferedReader br = new BufferedReader(new FileReader(map));
-
-            int i = 0; // row
-            int j = 0; // col
-            while (i < maxScreenRow && j < maxScreenCol) {
-                String line = br.readLine();
-                while (j < maxScreenRow) {
-                    String numbers[] = line.split(" ");
-                    int num = Integer.parseInt(numbers[j]);
-
-                    switch (num) {
-                        case 1 ->
-                            objects.add(new Brick(j * tileSize, i * tileSize));
-                        case 2 ->
-                            objects.add(new SteelBrick(j * tileSize, i * tileSize));
-                        case 3 ->
-                            objects.add(new Grass(j * tileSize, i * tileSize));
-                        case 4 ->
-                            objects.add(new River(j * tileSize, i * tileSize));
-                        case 5 ->
-                            objects.add(new Base(j * tileSize, i * tileSize));
-                    }
-                    mapData[i][j] = num;
-                    j++;
-                }
-                if (j == maxScreenCol) {
-                    j = 0;
-                    i++;
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-=======
     public Menu getMenu() {
         return menu;
->>>>>>> ui
     }
 
     public Playing getPlaying() {
