@@ -20,12 +20,9 @@ public class TankGameJava {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         
-//        Game game=Game.getInstance();
-//        window.add(game);
-//        window.pack();
-//        game.init();
-        MainMenuPanel menu = new MainMenuPanel(window);
-        window.add(menu);
+        Game game=Game.getInstance();
+        window.add(game);
         window.pack();
+        game.init();
     }
 }
