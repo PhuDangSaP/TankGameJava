@@ -4,6 +4,7 @@
  */
 package gamestates;
 
+import com.mycompany.tankgamejava.Sound;
 import data.GameData;
 import data.SaveLoad;
 import java.awt.Color;
@@ -60,7 +61,7 @@ public class LeaderBoard implements StateMethods {
     public void mousePressed(MouseEvent e) {
         if (isIn(e, backButton)) {
             backButton.setMousePressed(true);
-
+            Sound.clickSound();
         }
     }
 

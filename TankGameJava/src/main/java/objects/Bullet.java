@@ -8,6 +8,7 @@ import com.mycompany.tankgamejava.Collision;
 import com.mycompany.tankgamejava.CollisionEvent;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
+import com.mycompany.tankgamejava.Sound;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -83,6 +84,7 @@ public class Bullet extends GameObject {
             isDead = true;
             if (!(e.obj instanceof SteelBrick)) {
                 e.obj.destroy();
+                Sound.explosion();
               
             }
             if(e.obj instanceof Enemy)
@@ -91,7 +93,7 @@ public class Bullet extends GameObject {
             }
             if(e.obj instanceof Player)
             {
-           
+                
             }
 
         }

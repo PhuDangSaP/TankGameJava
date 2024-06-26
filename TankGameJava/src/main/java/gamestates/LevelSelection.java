@@ -5,6 +5,7 @@
 package gamestates;
 
 import com.mycompany.tankgamejava.Game;
+import com.mycompany.tankgamejava.Sound;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -65,6 +66,7 @@ public class LevelSelection implements StateMethods {
     public void mousePressed(MouseEvent e) {
         for (MenuButton mb : levelButtons) {
             if (isIn(e, mb)) {
+                Sound.clickSound();
                 mb.setMousePressed(true);
                 break;
             }

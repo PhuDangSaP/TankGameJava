@@ -6,6 +6,7 @@ package gamestates;
 
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
+import com.mycompany.tankgamejava.Sound;
 import data.GameData;
 import data.SaveLoad;
 import java.awt.Color;
@@ -28,6 +29,7 @@ public class Menu implements StateMethods {
 
     public Menu() {
         init();
+        Sound.startStage();
     }
 
     private void init() {
@@ -66,6 +68,7 @@ public class Menu implements StateMethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        Sound.clickSound();
         for (MenuButton mb : buttons) {
             if (isIn(e, mb)) {
                 mb.setMousePressed(true);

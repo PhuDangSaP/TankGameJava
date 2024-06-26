@@ -5,6 +5,7 @@
 package gamestates;
 
 import com.mycompany.tankgamejava.Game;
+import com.mycompany.tankgamejava.Sound;
 import data.GameData;
 import data.SaveLoad;
 import java.awt.Color;
@@ -60,6 +61,7 @@ public class GameWin implements StateMethods {
     public void mousePressed(MouseEvent e) {
         for (MenuButton mb : buttons) {
             if (isIn(e, mb)) {
+                Sound.clickSound();
                 mb.setMousePressed(true);
                 break;
             }

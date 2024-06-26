@@ -5,6 +5,7 @@
 package gamestates;
 
 import com.mycompany.tankgamejava.Game;
+import com.mycompany.tankgamejava.Sound;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -21,6 +22,7 @@ public class GameOver implements StateMethods {
     private MenuButton[] buttons = new MenuButton[2];
 
     public GameOver() {
+      
         buttons[0] = new MenuButton(200, 150, 100, 50, GameState.LEVELSELECTION, "LevelSelection");
         buttons[1] = new MenuButton(200, 220, 100, 50, GameState.PLAYING, "Restart");
     }
@@ -53,6 +55,7 @@ public class GameOver implements StateMethods {
     public void mousePressed(MouseEvent e) {
         for (MenuButton mb : buttons) {
             if (isIn(e, mb)) {
+                Sound.clickSound();
                 mb.setMousePressed(true);
                 break;
             }

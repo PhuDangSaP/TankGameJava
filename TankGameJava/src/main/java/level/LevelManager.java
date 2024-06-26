@@ -5,6 +5,7 @@
 package level;
 
 import com.mycompany.tankgamejava.Collision;
+import com.mycompany.tankgamejava.Sound;
 import data.GameData;
 import data.SaveLoad;
 import gamestates.GameState;
@@ -158,6 +159,7 @@ public class LevelManager {
                 Logger.getLogger(LevelManager.class.getName()).log(Level.SEVERE, null, ex);
             }
             GameState.state = GameState.GAMEWIN;
+            Sound.gameWin();
         }
     }
 

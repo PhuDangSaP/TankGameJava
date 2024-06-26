@@ -9,6 +9,7 @@ import com.mycompany.tankgamejava.CollisionEvent;
 import inputs.KeyHandler;
 import com.mycompany.tankgamejava.Game;
 import com.mycompany.tankgamejava.ResourceManager;
+import com.mycompany.tankgamejava.Sound;
 import com.mycompany.tankgamejava.Util;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -235,6 +236,7 @@ public class Player extends GameObject {
 
             Bullet bullet = new Bullet(x + offSetX, y + offSetY, dir);
             bullets.add(bullet);
+            Sound.fireSound();
             //Collision.coObjects.add(bullet);
             lastFiredTime = currentTime;
         }
@@ -251,6 +253,7 @@ public class Player extends GameObject {
             isDead = true;
             deathTime = System.currentTimeMillis();
             state = PlayerState.DEAD;
+            Sound.explosion();
             System.err.println(e.obj.getClass());
             if(e.obj instanceof Bullet)
             {
@@ -278,6 +281,7 @@ public class Player extends GameObject {
         }
         else {
             GameState.state=GameState.GAMEOVER;
+            Sound.gameOver();
         }
     }
 }
